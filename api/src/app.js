@@ -1,29 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const addRequestId = require('express-request-id');
+const helmet = require('helmet');
+const middleware = require('./middleware');
+const diagnosticRouter = require('./diagnostic');
 
 const app = express();
+app.use(helmet());
 app.use(bodyParser.json());
+app.use(addRequestId({
+    attributeName: 'requestId',
+}));
 
-app.get('/alive', (req, res) => {
-    res.json({
-        isAlive: true,
-    });
-});
+app.use('/diagnostic', diagnosticRouter);
 
-app.use((req, res, next) => {
-    // no route matched so turn this into a 404
-    res.status(404);
-    res.send('Not Found');
-    next();
-});
-
-app.use((err, req, res, next) => {
-    if(res.headersSent) {
-        return next(err);
-    }
-
-    res.status(500);
-    res.send('Internal server error');
-});
+app.use(middleware.notFoundHandler);
+app.use(middleware.errorHandler);
 
 module.exports = app;
