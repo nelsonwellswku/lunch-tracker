@@ -9,7 +9,7 @@ const app = express();
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(addRequestId({
-    attributeName: 'requestId',
+  attributeName: 'requestId',
 }));
 
 app.use('/diagnostic', diagnosticRouter);

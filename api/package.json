@@ -3,6 +3,7 @@
     "start": "nodemon src/server.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-request-id": "^1.4.0",
     "helmet": "^3.12.0",
