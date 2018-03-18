@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const bodyParser = require('body-parser');
 const addRequestId = require('express-request-id');
 const helmet = require('helmet');

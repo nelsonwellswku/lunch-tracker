@@ -640,6 +640,10 @@ expect-ct@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/expect-ct/-/expect-ct-0.1.0.tgz#52735678de18530890d8d7b95f0ac63640958094"
 
+express-async-errors@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/express-async-errors/-/express-async-errors-2.1.2.tgz#a5692a0763904109f27d9649b4f827cf89100f53"
+
 express-request-id@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/express-request-id/-/express-request-id-1.4.0.tgz#277b2c0949803e68104c9d45c3e68934f96bf5a2"
