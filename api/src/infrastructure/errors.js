@@ -1,7 +1,7 @@
 class NotImplemented extends Error {
   constructor(message) {
     super();
-    this.message = message;
+    this.message = message || 'Function not implemented.';
   }
 }
 
