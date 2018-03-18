@@ -13,6 +13,17 @@ const logout = (req, res) => {
 const registerUser = async (req, res) => {
   const { emailAddress, password } = req.body;
 
+  const userExists = (await db.queryBuilder()
+    .select('AppUserId')
+    .from('AppUser')
+    .where({ EmailAddress: emailAddress })
+    .limit(1))
+    .length;
+
+  if (userExists) {
+    throw new errors.Client(`Email address ${emailAddress} is not available.`);
+  }
+
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
 

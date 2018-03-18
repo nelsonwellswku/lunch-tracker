@@ -5,6 +5,14 @@ class NotImplemented extends Error {
   }
 }
 
+class Client extends Error {
+  constructor(message) {
+    super();
+    this.message = message || 'Client error.';
+  }
+}
+
 module.exports = {
   NotImplemented,
+  Client,
 };

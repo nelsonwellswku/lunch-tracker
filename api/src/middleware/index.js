@@ -2,8 +2,7 @@ const errors = require('../infrastructure/errors');
 const logger = require('../infrastructure/logger');
 
 const notFoundHandler = (req, res, next) => {
-  res.status(404);
-  res.send('Not Found');
+  res.sendStatus(404);
   next();
 };
 
@@ -14,13 +13,19 @@ const errorHandler = (err, req, res, next) => {
     return next(err);
   }
 
-  if (err instanceof errors.NotImplemented) {
-    return res.status(501).send('Not Implemented');
+  if (err instanceof errors.Client) {
+    return res.status(400).send({
+      statusCode: 400,
+      message: err.message,
+      error: 'Bad Request',
+    });
   }
 
-  return res
-    .status(500)
-    .send('Internal Server Error');
+  if (err instanceof errors.NotImplemented) {
+    return res.sendStatus(501);
+  }
+
+  return res.sendStatus(500);
 };
 
 module.exports = {
