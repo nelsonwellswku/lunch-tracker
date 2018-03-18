@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "knex": "node ./node_modules/knex/bin/cli.js"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "knex": "^0.14.4",
+    "mssql": "^4.1.0"
+  }
+}
