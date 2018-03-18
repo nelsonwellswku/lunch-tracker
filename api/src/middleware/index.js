@@ -1,4 +1,5 @@
 const errors = require('../infrastructure/errors');
+const logger = require('../infrastructure/logger');
 
 const notFoundHandler = (req, res, next) => {
   res.status(404);
@@ -7,7 +8,7 @@ const notFoundHandler = (req, res, next) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  console.log(err);
+  logger.error(`Error handler: ${err}`);
 
   if (res.headersSent) {
     return next(err);
