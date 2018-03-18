@@ -4,6 +4,7 @@ const addRequestId = require('express-request-id');
 const helmet = require('helmet');
 const middleware = require('./middleware');
 const diagnosticRouter = require('./diagnostic');
+const authenticationRouter = require('./authentication');
 
 const app = express();
 app.use(helmet());
@@ -13,6 +14,7 @@ app.use(addRequestId({
 }));
 
 app.use('/diagnostic', diagnosticRouter);
+app.use('/authentication', authenticationRouter);
 
 app.use(middleware.notFoundHandler);
 app.use(middleware.errorHandler);

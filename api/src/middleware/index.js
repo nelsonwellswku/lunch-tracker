@@ -1,3 +1,5 @@
+const errors = require('../infrastructure/errors');
+
 const notFoundHandler = (req, res, next) => {
   res.status(404);
   res.send('Not Found');
@@ -7,6 +9,10 @@ const notFoundHandler = (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
+  }
+
+  if (err instanceof errors.NotImplemented) {
+    return res.status(501).send('Not Implemented')
   }
 
   return res
