@@ -12,6 +12,7 @@ const logout = (req, res) => {
 
 const registerUser = async (req, res) => {
   const { emailAddress, password } = req.body;
+
   const salt = await bcrypt.genSalt(10);
   const passwordHash = await bcrypt.hash(password, salt);
 

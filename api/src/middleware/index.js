@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if (err instanceof errors.NotImplemented) {
-    return res.status(501).send('Not Implemented')
+    return res.status(501).send('Not Implemented');
   }
 
   return res
