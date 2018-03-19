@@ -15,8 +15,8 @@ app.use(addRequestId({
   attributeName: 'requestId',
 }));
 
-app.use('/diagnostic', diagnosticRouter);
-app.use('/authentication', authenticationRouter);
+app.use('/api/diagnostic', diagnosticRouter);
+app.use('/api/authentication', authenticationRouter);
 
 app.use(celebrateErrors());
 app.use(middleware.notFoundHandler);
