@@ -6,6 +6,21 @@ const notFoundHandler = (req, res, next) => {
   next();
 };
 
+const joiErrorHandler = (err, req, res, next) => {
+  if (!err.isJoi) {
+    return next();
+  }
+
+  const response = {
+    errors: err.details.map(detail => ({
+      field: detail.context.key,
+      message: detail.message,
+    })),
+  };
+
+  res.status(400).json(response);
+};
+
 const errorHandler = (err, req, res, next) => {
   logger.error(`Error handler: ${err}`);
 
@@ -31,4 +46,5 @@ const errorHandler = (err, req, res, next) => {
 module.exports = {
   notFoundHandler,
   errorHandler,
+  joiErrorHandler,
 };

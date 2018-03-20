@@ -9,6 +9,7 @@ class Register extends Component {
       emailAddress: '',
       password: '',
       passwordConfirmation: '',
+      validationErrors: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -23,23 +24,34 @@ class Register extends Component {
   }
 
   async handleSubmit(submitEvent) {
-    console.log('here');
     submitEvent.preventDefault();
-    const postBody = this.state;
+    const postBody = {
+      emailAddress: this.state.emailAddress,
+      password: this.state.password,
+      passwordConfirmation: this.state.passwordConfirmation,
+    };
     try {
-      console.log('before');
       await axios.post('/api/authentication/registerUser', postBody);
-      console.log('after');
-    } catch (e) {
-      console.log('in err handler');
-      console.log(e);
+      this.setState({
+        validationErrors: [],
+      });
+    } catch (err) {
+      if (err.response) {
+        this.setState({
+          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+        });
+      }
     }
   }
 
   render() {
+    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
+    const validationList = <ul>{validationListItems}</ul>;
+    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
     return (
-      <div>
+      <div className="col-md-4">
         <h1>Register</h1>
+        {this.state.validationErrors.length ? validationDiv : null}
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="registrationFormEmailAddress">
             <ControlLabel>Email address</ControlLabel>
