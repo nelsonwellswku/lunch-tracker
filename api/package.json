@@ -1,4 +1,7 @@
 {
+  "name": "lunch-tracker-api",
+  "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "start": "nodemon --inspect src/server.js"
   },

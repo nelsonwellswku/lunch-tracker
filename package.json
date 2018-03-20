@@ -1,4 +1,7 @@
 {
+  "name": "lunch-tracker",
+  "version": "0.1.0",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^4.18.2",
     "eslint-config-airbnb": "^16.1.0",
