@@ -15,5 +15,8 @@
     "linebreak-style": "off",
     "react/jsx-filename-extension": "off"
   },
-  "extends": "airbnb"
+  "extends": [
+    "airbnb",
+    "plugin:jest/recommended"
+  ]
 }
