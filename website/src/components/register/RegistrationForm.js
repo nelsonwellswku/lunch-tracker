@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
-class Register extends Component {
+class RegistrationForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -35,6 +36,7 @@ class Register extends Component {
       this.setState({
         validationErrors: [],
       });
+      this.props.onSuccessfulRegistration();
     } catch (err) {
       if (err.response) {
         this.setState({
@@ -49,7 +51,7 @@ class Register extends Component {
     const validationList = <ul>{validationListItems}</ul>;
     const validationDiv = <div className="alert alert-danger">{validationList}</div>;
     return (
-      <div className="col-md-4">
+      <Col md={4}>
         <h1>Register</h1>
         {this.state.validationErrors.length ? validationDiv : null}
         <form onSubmit={this.handleSubmit}>
@@ -85,8 +87,12 @@ class Register extends Component {
           </FormGroup>
           <Button type="submit">Register</Button>
         </form >
-      </div>);
+      </Col>);
   }
 }
 
-export default Register;
+RegistrationForm.propTypes = {
+  onSuccessfulRegistration: PropTypes.func.isRequired,
+};
+
+export default RegistrationForm;
