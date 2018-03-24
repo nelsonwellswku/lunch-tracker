@@ -22,3 +22,5 @@ exports[`register user endpoint; can register a new user: send status 1`] = `
   ],
 }
 `;
+
+exports[`register user endpoint; throws error if email address is already in use 1`] = `[Error: Email address TestUsername is not available.]`;
