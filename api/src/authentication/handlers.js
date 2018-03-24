@@ -1,9 +1,6 @@
 const errors = require('../infrastructure/errors');
 const registerUser = require('./register-user');
-
-const login = (req, res) => {
-  throw new errors.NotImplemented();
-};
+const login = require('./login');
 
 const logout = (req, res) => {
   throw new errors.NotImplemented();
