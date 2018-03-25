@@ -17,7 +17,6 @@ class App extends Component {
 
     this.logIn = this.logIn.bind(this);
     this.logout = this.logout.bind(this);
-    this.getUser = this.getUser.bind(this);
   }
 
   componentWillMount() {
@@ -28,10 +27,6 @@ class App extends Component {
         user,
       });
     }
-  }
-
-  getUser() {
-    return this.state.user;
   }
 
   logout() {
@@ -64,6 +59,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;

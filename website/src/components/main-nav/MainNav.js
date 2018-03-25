@@ -20,7 +20,7 @@ class MainNav extends Component {
 
   getLogButton() {
     return (this.state.user ?
-      (<NavItem href="#" onClick={this.handleLogout}>
+      (<NavItem href="/" onClick={this.handleLogout}>
         Log Out
        </NavItem>)
       : (<NavItem href="/authentication/login">
