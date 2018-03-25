@@ -51,7 +51,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <MainNav getUser={this.getUser} logout={this.logout} />
+        <MainNav user={this.state.user} logout={this.logout} />
 
         <Router>
           <Grid>

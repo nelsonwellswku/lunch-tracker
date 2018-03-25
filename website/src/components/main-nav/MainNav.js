@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 class MainNav extends Component {
   constructor(props) {
     super();
     this.state = {
-      user: null,
+      user: props.user,
     };
 
     this.getLogButton = this.getLogButton.bind(this);
     this.handleLogout = props.logout;
-    this.getUser = props.getUser;
   }
 
-  componentWillMount() {
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      user: this.getUser(),
+      user: nextProps.user,
     });
   }
 
@@ -48,10 +46,5 @@ class MainNav extends Component {
       </Navbar>);
   }
 }
-
-MainNav.propTypes = {
-  getUser: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-};
 
 export default MainNav;
