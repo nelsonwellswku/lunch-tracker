@@ -16,7 +16,7 @@ const login = async (req, res) => {
     throw new errors.Client('Invalid username or password');
   }
 
-  const jwtPayload = { userId: user.userId };
+  const jwtPayload = { appUserId: user.appUserId };
   jwt.sign(jwtPayload, appConfig.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
     res.send({ token });
   });

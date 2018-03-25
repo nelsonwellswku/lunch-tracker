@@ -14,6 +14,7 @@ const appConfig = {
   DB_NAME: getEnvironmentVariable('DB_NAME'),
   DB_USERNAME: getEnvironmentVariable('DB_USERNAME'),
   DB_PASSWORD: getEnvironmentVariable('DB_PASSWORD'),
+  JWT_SECRET: getEnvironmentVariable('JWT_SECRET'),
 };
 
 module.exports = appConfig;

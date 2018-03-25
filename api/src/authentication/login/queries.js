@@ -2,13 +2,13 @@ const db = require('../../infrastructure/database');
 
 const getUser = async (emailAddress) => {
   const user = await db.queryBuilder()
-    .first('UserId', 'PasswordHash')
+    .first('AppUserId', 'PasswordHash')
     .from('AppUser')
     .where({ EmailAddress: emailAddress });
 
   if (user) {
     return {
-      userId: user.UserId,
+      appUserId: user.AppUserId,
       passwordHash: user.PasswordHash,
     };
   }
