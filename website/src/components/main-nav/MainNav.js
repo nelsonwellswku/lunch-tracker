@@ -9,7 +9,6 @@ class MainNav extends Component {
     };
 
     this.getLogButton = this.getLogButton.bind(this);
-    this.handleLogout = props.logout;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -20,7 +19,7 @@ class MainNav extends Component {
 
   getLogButton() {
     return (this.state.user ?
-      (<NavItem href="/" onClick={this.handleLogout}>
+      (<NavItem href="/authentication/logout">
         Log Out
        </NavItem>)
       : (<NavItem href="/authentication/login">

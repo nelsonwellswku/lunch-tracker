@@ -7,6 +7,7 @@ import Home from './components/home/Home';
 import MainNav from './components/main-nav/MainNav';
 import RegistrationPage from './components/register/RegistrationPage';
 import LogInPage from './components/log-in/LogInPage';
+import LogOutPage from './components/log-out/LogOutPage';
 
 class App extends Component {
   constructor() {
@@ -16,7 +17,7 @@ class App extends Component {
     };
 
     this.logIn = this.logIn.bind(this);
-    this.logout = this.logout.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   componentWillMount() {
@@ -29,7 +30,7 @@ class App extends Component {
     }
   }
 
-  logout() {
+  logOut() {
     localStorage.removeItem('authToken');
     this.setState({
       user: null,
@@ -46,12 +47,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <MainNav user={this.state.user} logout={this.logout} />
+        <MainNav user={this.state.user} />
 
         <Router>
           <Grid>
             <Route exact path="/" component={Home} />
             <Route path="/authentication/login" render={() => <LogInPage logIn={this.logIn} />} />
+            <Route path="/authentication/logout" render={() => <LogOutPage logOut={this.logOut} />} />
             <Route path="/authentication/register" component={RegistrationPage} />
           </Grid>
         </Router>
