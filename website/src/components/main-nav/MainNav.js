@@ -6,28 +6,28 @@ class MainNav extends Component {
   constructor(props) {
     super();
     this.state = {
-      isLoggedIn: props.isLoggedIn,
+      user: null,
     };
 
     this.getLogButton = this.getLogButton.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
+    this.handleLogout = props.logout;
+    this.getUser = props.getUser;
+  }
+
+  componentWillMount() {
+    this.setState({
+      user: this.getUser(),
+    });
   }
 
   getLogButton() {
-    return (this.state.isLoggedIn ?
+    return (this.state.user ?
       (<NavItem href="#" onClick={this.handleLogout}>
         Log Out
        </NavItem>)
       : (<NavItem href="/authentication/login">
         Log In
          </NavItem>));
-  }
-
-  handleLogout() {
-    localStorage.removeItem('authToken');
-    this.setState({
-      isLoggedIn: false,
-    });
   }
 
   render() {
@@ -49,6 +49,9 @@ class MainNav extends Component {
   }
 }
 
-MainNav.propTypes = { isLoggedIn: PropTypes.bool.isRequired };
+MainNav.propTypes = {
+  getUser: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+};
 
 export default MainNav;

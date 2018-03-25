@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import axios from 'axios';
 import Redirect from 'react-router-dom/Redirect';
+import PropTypes from 'prop-types';
 
 class LogInPage extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       emailAddress: '',
@@ -15,6 +16,7 @@ class LogInPage extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.logIn = props.logIn;
   }
 
   handleChange(changeEvent) {
@@ -32,7 +34,7 @@ class LogInPage extends Component {
     };
     try {
       const logInResult = await axios.post('/api/authentication/login', postBody);
-      localStorage.setItem('authToken', logInResult.data.token);
+      this.logIn(logInResult.data.token);
       this.setState({
         isLoggedIn: true,
         validationErrors: [],
@@ -84,5 +86,9 @@ class LogInPage extends Component {
       </Col>);
   }
 }
+
+LogInPage.propTypes = {
+  logIn: PropTypes.func.isRequired,
+};
 
 export default LogInPage;
