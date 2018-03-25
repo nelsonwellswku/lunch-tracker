@@ -28,8 +28,17 @@ class MainNav extends Component {
          </NavItem>));
   }
 
+  getRegisterButton() {
+    return (!this.state.user) ?
+      <NavItem href="/authentication/register">
+        Register
+      </NavItem>
+      : null;
+  }
+
   render() {
     const logInOrLogOut = this.getLogButton();
+    const getRegisterButton = this.getRegisterButton();
     return (
       <Navbar>
         <Navbar.Header>
@@ -39,9 +48,7 @@ class MainNav extends Component {
         </Navbar.Header>
         <Nav pullRight>
           {logInOrLogOut}
-          <NavItem href="/authentication/register">
-            Register
-          </NavItem>
+          {getRegisterButton}
         </Nav>
       </Navbar>);
   }
