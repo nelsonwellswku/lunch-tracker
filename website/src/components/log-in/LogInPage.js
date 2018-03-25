@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import axios from 'axios';
+import Redirect from 'react-router-dom/Redirect';
 
 class LogInPage extends Component {
-  static handleSuccessfulSignIn(signInResult) {
-    localStorage.setItem('authToken', signInResult.data.token);
-  }
-
   constructor() {
     super();
     this.state = {
       emailAddress: '',
       password: '',
       validationErrors: [],
+      isLoggedIn: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,8 +32,9 @@ class LogInPage extends Component {
     };
     try {
       const logInResult = await axios.post('/api/authentication/login', postBody);
-      LogInPage.handleSuccessfulSignIn(logInResult);
+      localStorage.setItem('authToken', logInResult.data.token);
       this.setState({
+        isLoggedIn: true,
         validationErrors: [],
       });
     } catch (err) {
@@ -48,6 +47,10 @@ class LogInPage extends Component {
   }
 
   render() {
+    if (this.state.isLoggedIn) {
+      return <Redirect to="/" />;
+    }
+
     const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
     const validationList = <ul>{validationListItems}</ul>;
     const validationDiv = <div className="alert alert-danger">{validationList}</div>;
