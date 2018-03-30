@@ -3,7 +3,7 @@ import { Grid } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import './App.css';
-import Home from './components/home/Home';
+import HomePage from './components/home/HomePage';
 import MainNav from './components/main-nav/MainNav';
 import RegistrationPage from './components/register/RegistrationPage';
 import LogInPage from './components/log-in/LogInPage';
@@ -16,6 +16,7 @@ class App extends Component {
       user: null,
     };
 
+    this.homePage = this.homePage.bind(this);
     this.logInPage = this.logInPage.bind(this);
     this.logOutPage = this.logOutPage.bind(this);
     this.logIn = this.logIn.bind(this);
@@ -54,6 +55,10 @@ class App extends Component {
     return <LogOutPage logOut={this.logOut} />;
   }
 
+  homePage() {
+    return <HomePage user={this.state.user} />;
+  }
+
   render() {
     return (
       <div>
@@ -61,7 +66,7 @@ class App extends Component {
 
         <Router>
           <Grid>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={this.homePage} />
             <Route path="/authentication/login" render={this.logInPage} />
             <Route path="/authentication/logout" render={this.logOutPage} />
             <Route path="/authentication/register" component={RegistrationPage} />
