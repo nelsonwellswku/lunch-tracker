@@ -16,6 +16,8 @@ class App extends Component {
       user: null,
     };
 
+    this.logInPage = this.logInPage.bind(this);
+    this.logOutPage = this.logOutPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
   }
@@ -44,6 +46,14 @@ class App extends Component {
     });
   }
 
+  logInPage() {
+    return <LogInPage logIn={this.logIn} />;
+  }
+
+  logOutPage() {
+    return <LogOutPage logOut={this.logOut} />;
+  }
+
   render() {
     return (
       <div>
@@ -52,8 +62,8 @@ class App extends Component {
         <Router>
           <Grid>
             <Route exact path="/" component={Home} />
-            <Route path="/authentication/login" render={() => <LogInPage logIn={this.logIn} />} />
-            <Route path="/authentication/logout" render={() => <LogOutPage logOut={this.logOut} />} />
+            <Route path="/authentication/login" render={this.logInPage} />
+            <Route path="/authentication/logout" render={this.logOutPage} />
             <Route path="/authentication/register" component={RegistrationPage} />
           </Grid>
         </Router>

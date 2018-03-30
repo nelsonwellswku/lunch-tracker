@@ -3,22 +3,13 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 class MainNav extends Component {
   constructor(props) {
-    super();
-    this.state = {
-      user: props.user,
-    };
+    super(props);
 
     this.getLogButton = this.getLogButton.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      user: nextProps.user,
-    });
-  }
-
   getLogButton() {
-    return (this.state.user ?
+    return (this.props.user ?
       (<NavItem href="/authentication/logout">
         Log Out
        </NavItem>)
@@ -28,7 +19,7 @@ class MainNav extends Component {
   }
 
   getRegisterButton() {
-    return (!this.state.user) ?
+    return (!this.props.user) ?
       <NavItem href="/authentication/register">
         Register
       </NavItem>
