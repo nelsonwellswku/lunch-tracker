@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
+import {
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  Button,
+  Col,
+  ButtonToolbar,
+  ToggleButtonGroup,
+  ToggleButton,
+} from 'react-bootstrap';
 
 class LunchForm extends Component {
   constructor() {
@@ -7,8 +16,10 @@ class LunchForm extends Component {
     this.state = {
       whereDidYouEat: '',
       howMuchDidYouPay: '',
+      willYouGoBack: '',
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -24,13 +35,14 @@ class LunchForm extends Component {
     const postBody = {
       whereDidYouEat: this.state.whereDidYouEat,
       howMuchDidYouPay: this.state.howMuchDidYouPay,
+      willYouGoBack: this.state.willYouGoBack,
     };
     console.log('Submitting lunch form', postBody);
   }
 
   render() {
     return (
-      <Col md="4">
+      <Col md={4}>
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="lunchFormWhereDidYouEat">
             <ControlLabel>Where did you eat?</ControlLabel>
@@ -49,6 +61,15 @@ class LunchForm extends Component {
               value={this.state.howMuchDidYouPay}
               onChange={this.handleChange}
             />
+          </FormGroup>
+          <FormGroup controlId="willYouGoBack">
+            <ControlLabel>Will you go back?</ControlLabel>
+            <ButtonToolbar>
+              <ToggleButtonGroup type="radio" name="willYouGoBack">
+                <ToggleButton value={1}>Yes</ToggleButton>
+                <ToggleButton value={2}>No</ToggleButton>
+              </ToggleButtonGroup>
+            </ButtonToolbar>
           </FormGroup>
           <Button type="submit">Save</Button>
         </form>
