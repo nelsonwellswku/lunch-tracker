@@ -24,10 +24,16 @@ class LunchForm extends Component {
   }
 
   handleChange(changeEvent) {
-    const { name, value } = changeEvent.target;
-    this.setState({
-      [name]: value,
-    });
+    if (changeEvent.target) {
+      const { name, value } = changeEvent.target;
+      this.setState({
+        [name]: value,
+      });
+    } else {
+      this.setState({
+        willYouGoBack: changeEvent,
+      });
+    }
   }
 
   handleSubmit(submitEvent) {
@@ -65,9 +71,9 @@ class LunchForm extends Component {
           <FormGroup controlId="willYouGoBack">
             <ControlLabel>Will you go back?</ControlLabel>
             <ButtonToolbar>
-              <ToggleButtonGroup type="radio" name="willYouGoBack">
-                <ToggleButton value={1}>Yes</ToggleButton>
-                <ToggleButton value={2}>No</ToggleButton>
+              <ToggleButtonGroup type="radio" name="willYouGoBack" onChange={this.handleChange}>
+                <ToggleButton value="yes">Yes</ToggleButton>
+                <ToggleButton value="no">No</ToggleButton>
               </ToggleButtonGroup>
             </ButtonToolbar>
           </FormGroup>
