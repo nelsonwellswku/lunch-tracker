@@ -1,4 +1,5 @@
 import React from 'react';
+import LunchForm from './LunchForm';
 
 const HomePage = (props) => {
   const registrationUrl = '/authentication/register';
@@ -15,6 +16,7 @@ const HomePage = (props) => {
     <div>
       <h1>Welcome to Lunch Tracker!</h1>
       {registrationGreeting}
+      <LunchForm />
     </div>
   );
 };
