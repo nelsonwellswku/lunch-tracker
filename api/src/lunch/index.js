@@ -17,6 +17,16 @@ router.get(
   }),
   handlers.getLunch,
 );
-router.post('/lunch', handlers.createLunch);
+router.post(
+  '/lunch',
+  celebrate({
+    body: {
+      whereDidYouEat: Joi.string().required(),
+      howMuchDidYouPay: Joi.string(),
+      willYouGoBack: Joi.string().required(),
+    },
+  }),
+  handlers.createLunch,
+);
 
 module.exports = router;

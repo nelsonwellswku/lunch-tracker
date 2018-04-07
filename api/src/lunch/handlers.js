@@ -1,11 +1,6 @@
-const getLunch = (req, res) => {
-  res.json({
-    success: true,
-    user: req.user,
-  });
-};
+const createLunch = require('./create-lunch');
 
-const createLunch = (req, res) => {
+const getLunch = (req, res) => {
   res.json({
     success: true,
     user: req.user,
