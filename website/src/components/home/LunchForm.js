@@ -9,6 +9,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from 'react-bootstrap';
+import axios from 'axios';
 
 class LunchForm extends Component {
   constructor() {
@@ -36,14 +37,14 @@ class LunchForm extends Component {
     }
   }
 
-  handleSubmit(submitEvent) {
+  async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
     const postBody = {
       whereDidYouEat: this.state.whereDidYouEat,
       howMuchDidYouPay: this.state.howMuchDidYouPay,
       willYouGoBack: this.state.willYouGoBack,
     };
-    console.log('Submitting lunch form', postBody);
+    await axios.post('/api/lunch', postBody);
   }
 
   render() {
@@ -71,7 +72,8 @@ class LunchForm extends Component {
           <FormGroup controlId="willYouGoBack">
             <ControlLabel>Will you go back?</ControlLabel>
             <ButtonToolbar>
-              <ToggleButtonGroup type="radio" name="willYouGoBack" onChange={this.handleChange}>
+              <ToggleButtonGroup type="radio" name="willYouGoBack" defaultValue="unsure" onChange={this.handleChange}>
+                <ToggleButton value="unsure">Unsure</ToggleButton>
                 <ToggleButton value="yes">Yes</ToggleButton>
                 <ToggleButton value="no">No</ToggleButton>
               </ToggleButtonGroup>

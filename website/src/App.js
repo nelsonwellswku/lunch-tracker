@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 import './App.css';
 import HomePage from './components/home/HomePage';
 import MainNav from './components/main-nav/MainNav';
@@ -38,6 +39,7 @@ class App extends Component {
     this.setState({
       user: null,
     });
+    delete axios.defaults.headers.common.Authorization;
   }
 
   logIn(authToken) {
@@ -45,6 +47,7 @@ class App extends Component {
     this.setState({
       user: jwtDecode(authToken),
     });
+    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
   logInPage() {
