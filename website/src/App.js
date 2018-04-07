@@ -31,6 +31,7 @@ class App extends Component {
       this.setState({
         user,
       });
+      axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
     }
   }
 
