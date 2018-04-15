@@ -8,7 +8,7 @@ const createLunch = async (req, res) => {
     location: req.body.whereDidYouEat,
     cost: req.body.howMuchDidYouPay,
     revisit: req.body.willYouGoBack,
-    date: moment().format('MM-DD-YYYY'),
+    date: moment.utc().format(),
   });
 
   res.json({

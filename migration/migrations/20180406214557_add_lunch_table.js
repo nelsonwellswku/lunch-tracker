@@ -7,7 +7,7 @@ exports.up = knex => knex
     table.string('Location', 60).notNullable();
     table.decimal('Cost', 8, 2);
     table.string('Revisit', 6).notNullable();
-    table.date('LunchDate').notNullable();
+    table.specificType('LunchDate', 'datetime2').notNullable();
 
     table
       .foreign('AppUserId', 'FK_Lunch_AppUser_AppUserId')
