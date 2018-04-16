@@ -26,7 +26,7 @@ router.post(
       willYouGoBack: Joi.string().required(),
     },
   }),
-  handlers.createLunch,
+  handlers.saveLunch,
 );
 
 module.exports = router;

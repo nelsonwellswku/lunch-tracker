@@ -1,4 +1,4 @@
-const createLunch = require('./create-lunch');
+const saveLunch = require('./save-lunch');
 
 const getLunch = (req, res) => {
   res.json({
@@ -9,5 +9,5 @@ const getLunch = (req, res) => {
 
 module.exports = {
   getLunch,
-  createLunch,
+  saveLunch,
 };
