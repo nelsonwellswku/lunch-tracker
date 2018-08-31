@@ -10,8 +10,7 @@ router.use(passport.authenticate('jwt', { session: false }));
 router.get(
   '/lunch',
   celebrate({
-    params: {
-      userId: Joi.string().guid().required(),
+    query: {
       date: Joi.date().required(),
     },
   }),

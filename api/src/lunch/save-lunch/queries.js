@@ -33,8 +33,9 @@ const updateLunch = async (lunch) => {
 };
 
 const getLunch = async ({ appUserId, date }) => {
-  const startOfDay = moment(date).startOf('day').format();
-  const endOfDay = moment(date).endOf('day').format();
+  const startOfDay = moment.utc(date).startOf('day').format();
+  const endOfDay = moment.utc(date).endOf('day').format();
+
   const lunch = await db.queryBuilder()
     .from('Lunch')
     .where('AppUserId', appUserId)

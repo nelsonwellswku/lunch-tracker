@@ -1,11 +1,5 @@
 const saveLunch = require('./save-lunch');
-
-const getLunch = (req, res) => {
-  res.json({
-    success: true,
-    user: req.user,
-  });
-};
+const getLunch = require('./get-lunch');
 
 module.exports = {
   getLunch,

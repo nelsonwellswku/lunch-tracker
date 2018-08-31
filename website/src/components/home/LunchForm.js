@@ -10,6 +10,7 @@ import {
   ToggleButton,
 } from 'react-bootstrap';
 import axios from 'axios';
+import moment from 'moment';
 
 class LunchForm extends Component {
   constructor() {
@@ -22,6 +23,22 @@ class LunchForm extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  async componentWillMount() {
+    const now = moment.utc().format('YYYY-MM-DD');
+
+    const results = await axios.get(`/api/lunch?date=${now}`);
+    if (results && results.data) {
+      const { data: lunch } = results;
+      const newState = {
+        whereDidYouEat: lunch.whereDidYouEat,
+        howMuchDidYouPay: lunch.howMuchDidYouPay,
+        willYouGoBack: lunch.willYouGoBack,
+      };
+
+      this.setState(newState);
+    }
   }
 
   handleChange(changeEvent) {
@@ -72,8 +89,14 @@ class LunchForm extends Component {
           <FormGroup controlId="willYouGoBack">
             <ControlLabel>Will you go back?</ControlLabel>
             <ButtonToolbar>
-              <ToggleButtonGroup type="radio" name="willYouGoBack" defaultValue="unsure" onChange={this.handleChange}>
-                <ToggleButton value="unsure">Unsure</ToggleButton>
+              <ToggleButtonGroup
+                type="radio"
+                name="willYouGoBack"
+                defaultValue="unsure"
+                value={this.state.willYouGoBack}
+                onChange={this.handleChange}
+              >
+                <ToggleButton value="unsure" >Unsure</ToggleButton>
                 <ToggleButton value="yes">Yes</ToggleButton>
                 <ToggleButton value="no">No</ToggleButton>
               </ToggleButtonGroup>
