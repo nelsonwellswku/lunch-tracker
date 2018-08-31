@@ -18,7 +18,7 @@ class LunchForm extends Component {
     this.state = {
       whereDidYouEat: '',
       howMuchDidYouPay: '',
-      willYouGoBack: '',
+      willYouGoBack: 'unsure',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -92,7 +92,6 @@ class LunchForm extends Component {
               <ToggleButtonGroup
                 type="radio"
                 name="willYouGoBack"
-                defaultValue="unsure"
                 value={this.state.willYouGoBack}
                 onChange={this.handleChange}
               >
