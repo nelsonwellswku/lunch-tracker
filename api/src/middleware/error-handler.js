@@ -10,9 +10,9 @@ const errorHandler = (err, req, res, next) => {
 
   if (err instanceof errors.Client) {
     return res.status(400).send({
-      statusCode: 400,
-      message: err.message,
-      error: 'Bad Request',
+      errors: [{
+        message: err.message,
+      }],
     });
   }
 
