@@ -27,17 +27,23 @@ class LunchForm extends Component {
 
   async componentWillMount() {
     const now = moment.utc().format('YYYY-MM-DD');
+    const { fetch } = this.props;
 
-    const results = await axios.get(`/api/lunch?date=${now}`);
-    if (results && results.data) {
-      const { data: lunch } = results;
-      const newState = {
-        whereDidYouEat: lunch.whereDidYouEat,
-        howMuchDidYouPay: lunch.howMuchDidYouPay,
-        willYouGoBack: lunch.willYouGoBack,
-      };
+    try {
+      fetch.add('currentLunch');
+      const results = await axios.get(`/api/lunch?date=${now}`);
+      if (results && results.data) {
+        const { data: lunch } = results;
+        const newState = {
+          whereDidYouEat: lunch.whereDidYouEat,
+          howMuchDidYouPay: lunch.howMuchDidYouPay,
+          willYouGoBack: lunch.willYouGoBack,
+        };
 
-      this.setState(newState);
+        this.setState(newState);
+      }
+    } finally {
+      fetch.remove('currentLunch');
     }
   }
 
@@ -61,7 +67,12 @@ class LunchForm extends Component {
       howMuchDidYouPay: this.state.howMuchDidYouPay,
       willYouGoBack: this.state.willYouGoBack,
     };
-    await axios.post('/api/lunch', postBody);
+    this.props.fetch.add('lunchForm');
+    try {
+      await axios.post('/api/lunch', postBody);
+    } finally {
+      this.props.fetch.remove('lunchForm');
+    }
   }
 
   render() {

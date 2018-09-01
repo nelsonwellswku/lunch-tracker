@@ -15,6 +15,7 @@ class App extends Component {
     super();
     this.state = {
       user: null,
+      fetching: {},
     };
 
     this.homePage = this.homePage.bind(this);
@@ -22,6 +23,8 @@ class App extends Component {
     this.logOutPage = this.logOutPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.addFetch = this.addFetch.bind(this);
+    this.removeFetch = this.removeFetch.bind(this);
   }
 
   componentWillMount() {
@@ -33,6 +36,27 @@ class App extends Component {
       });
       axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
     }
+  }
+
+  addFetch(item) {
+    this.setState({
+      fetching: {
+        ...this.state.fetching,
+        [item]: 1,
+      },
+    });
+  }
+
+  removeFetch(item) {
+    const newFetching = {
+      ...this.state.fetching,
+    };
+
+    delete newFetching[item];
+
+    this.setState({
+      fetching: newFetching,
+    });
   }
 
   logOut() {
@@ -60,13 +84,16 @@ class App extends Component {
   }
 
   homePage() {
-    return <HomePage user={this.state.user} />;
+    return (<HomePage
+      user={this.state.user}
+      fetch={({ add: this.addFetch, remove: this.removeFetch })}
+    />);
   }
 
   render() {
     return (
       <div>
-        <MainNav user={this.state.user} />
+        <MainNav user={this.state.user} fetching={this.state.fetching} />
 
         <Router>
           <Grid>

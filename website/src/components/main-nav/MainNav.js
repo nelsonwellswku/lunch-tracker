@@ -27,6 +27,8 @@ class MainNav extends Component {
   }
 
   render() {
+    const { fetching } = this.props;
+    console.log(fetching);
     const logInOrLogOut = this.getLogButton();
     const getRegisterButton = this.getRegisterButton();
     return (
@@ -36,6 +38,7 @@ class MainNav extends Component {
             <a href="/">Lunch Tracker</a>
           </Navbar.Brand>
         </Navbar.Header>
+        {Object.keys(fetching).length ? <Nav pullLeft><NavItem>Loading...</NavItem></Nav> : null}
         <Nav pullRight>
           {logInOrLogOut}
           {getRegisterButton}
