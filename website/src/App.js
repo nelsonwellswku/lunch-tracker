@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 import './App.css';
 import HomePage from './components/home/HomePage';
 import MainNav from './components/main-nav/MainNav';
@@ -14,6 +15,7 @@ class App extends Component {
     super();
     this.state = {
       user: null,
+      fetching: {},
     };
 
     this.homePage = this.homePage.bind(this);
@@ -21,6 +23,8 @@ class App extends Component {
     this.logOutPage = this.logOutPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.addFetch = this.addFetch.bind(this);
+    this.removeFetch = this.removeFetch.bind(this);
   }
 
   componentWillMount() {
@@ -30,7 +34,29 @@ class App extends Component {
       this.setState({
         user,
       });
+      axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
     }
+  }
+
+  addFetch(item) {
+    this.setState({
+      fetching: {
+        ...this.state.fetching,
+        [item]: 1,
+      },
+    });
+  }
+
+  removeFetch(item) {
+    const newFetching = {
+      ...this.state.fetching,
+    };
+
+    delete newFetching[item];
+
+    this.setState({
+      fetching: newFetching,
+    });
   }
 
   logOut() {
@@ -38,6 +64,7 @@ class App extends Component {
     this.setState({
       user: null,
     });
+    delete axios.defaults.headers.common.Authorization;
   }
 
   logIn(authToken) {
@@ -45,6 +72,7 @@ class App extends Component {
     this.setState({
       user: jwtDecode(authToken),
     });
+    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
   logInPage() {
@@ -56,13 +84,16 @@ class App extends Component {
   }
 
   homePage() {
-    return <HomePage user={this.state.user} />;
+    return (<HomePage
+      user={this.state.user}
+      fetch={({ add: this.addFetch, remove: this.removeFetch })}
+    />);
   }
 
   render() {
     return (
       <div>
-        <MainNav user={this.state.user} />
+        <MainNav user={this.state.user} fetching={this.state.fetching} />
 
         <Router>
           <Grid>
