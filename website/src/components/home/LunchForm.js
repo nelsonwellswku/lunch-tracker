@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import moment from 'moment';
+import { formatAsCurrency } from '../../presentation';
 
 class LunchForm extends Component {
   constructor() {
@@ -19,6 +20,7 @@ class LunchForm extends Component {
       whereDidYouEat: '',
       howMuchDidYouPay: '',
       willYouGoBack: 'unsure',
+      validationErrors: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,7 +38,7 @@ class LunchForm extends Component {
         const { data: lunch } = results;
         const newState = {
           whereDidYouEat: lunch.whereDidYouEat,
-          howMuchDidYouPay: lunch.howMuchDidYouPay,
+          howMuchDidYouPay: formatAsCurrency(lunch.howMuchDidYouPay),
           willYouGoBack: lunch.willYouGoBack,
         };
 
@@ -64,20 +66,34 @@ class LunchForm extends Component {
     submitEvent.preventDefault();
     const postBody = {
       whereDidYouEat: this.state.whereDidYouEat,
-      howMuchDidYouPay: this.state.howMuchDidYouPay,
+      howMuchDidYouPay: this.state.howMuchDidYouPay.replace('$', ''),
       willYouGoBack: this.state.willYouGoBack,
     };
     this.props.fetch.add('lunchForm');
     try {
       await axios.post('/api/lunch', postBody);
+      this.setState({
+        validationErrors: [],
+      })
+    } catch (err) {
+      if (err.response) {
+        this.setState({
+          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+        });
+      }
     } finally {
       this.props.fetch.remove('lunchForm');
     }
   }
 
   render() {
+    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
+    const validationList = <ul>{validationListItems}</ul>;
+    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
+
     return (
       <Col md={4}>
+        {this.state.validationErrors.length ? validationDiv : null}
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="lunchFormWhereDidYouEat">
             <ControlLabel>Where did you eat?</ControlLabel>

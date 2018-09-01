@@ -21,7 +21,7 @@ router.post(
   celebrate({
     body: {
       whereDidYouEat: Joi.string().required(),
-      howMuchDidYouPay: Joi.string(),
+      howMuchDidYouPay: Joi.number().precision(2),
       willYouGoBack: Joi.string().required(),
     },
   }),
