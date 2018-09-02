@@ -7,6 +7,7 @@ const middleware = require('./middleware');
 const diagnosticRouter = require('./diagnostic');
 const authenticationRouter = require('./authentication');
 const lunchRouter = require('./lunch');
+const userRouter = require('./user');
 
 const app = express();
 app.use(helmet());
@@ -17,7 +18,8 @@ app.use(addRequestId({
 
 app.use('/api/diagnostic', diagnosticRouter);
 app.use('/api/authentication', authenticationRouter);
-app.use('/api', lunchRouter);
+app.use('/api/lunch', lunchRouter);
+app.use('/api/user', userRouter);
 
 app.use(middleware.notFoundHandler);
 app.use(middleware.joiErrorHandler);
