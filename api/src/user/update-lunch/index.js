@@ -7,11 +7,7 @@ const updateLunch = async (req, res) => {
     revisit,
     date,
   } = req.body;
-  const { appUserId } = req.params;
-  const lunchId = await queries.getLunchId({
-    appUserId,
-    date,
-  });
+  const { appUserId, lunchId } = req.params;
 
   const lunchToSave = {
     lunchId,

@@ -30,7 +30,7 @@ router.post(
       date: Joi.date().required(),
     },
   }),
-  handlers.saveLunch,
+  handlers.createLunch,
 );
 
 router.put(

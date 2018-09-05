@@ -17,9 +17,8 @@ class LunchForm extends Component {
   constructor() {
     super();
     this.state = {
-      whereDidYouEat: '',
-      howMuchDidYouPay: '',
-      willYouGoBack: 'unsure',
+      lunches: {},
+      currentLunch: null,
       validationErrors: [],
     };
 
@@ -28,18 +27,24 @@ class LunchForm extends Component {
   }
 
   async componentWillMount() {
-    const now = moment.utc().format('YYYY-MM-DD');
-    const { fetch } = this.props;
+    const now = moment().format('YYYY-MM-DD');
+    const { fetch, user } = this.props;
 
     try {
       fetch.add('currentLunch');
-      const results = await axios.get(`/api/lunch?date=${now}`);
+      const results = await axios.get(`/api/user/${user.appUserId}/lunch`);
       if (results && results.data) {
-        const { data: lunch } = results;
+        const lunches = results.data.reduce((prev, curr) => {
+          return {
+            [curr.lunchId]: curr,
+            ...prev,
+          };
+        }, {});
+        const currentLunch = results.data.find(x => x.lunchDate === now);
+
         const newState = {
-          whereDidYouEat: lunch.whereDidYouEat,
-          howMuchDidYouPay: formatAsCurrency(lunch.howMuchDidYouPay),
-          willYouGoBack: lunch.willYouGoBack,
+          lunches,
+          currentLunch,
         };
 
         this.setState(newState);
