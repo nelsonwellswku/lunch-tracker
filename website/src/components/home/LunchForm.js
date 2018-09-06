@@ -18,12 +18,20 @@ class LunchForm extends Component {
     super();
     this.state = {
       lunches: {},
-      currentLunch: null,
+      currentLunchId: null,
       validationErrors: [],
+      form: {
+        location: '',
+        cost: '',
+        revisit: 'unsure',
+      },
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.withFetch = this.withFetch.bind(this);
+    this.createLunch = this.createLunch.bind(this);
+    this.updateLunch = this.updateLunch.bind(this);
   }
 
   async componentWillMount() {
@@ -40,11 +48,11 @@ class LunchForm extends Component {
             ...prev,
           };
         }, {});
-        const currentLunch = results.data.find(x => x.lunchDate === now);
+        const currentLunch = results.data.find(x => x.lunchDate === now) || {};
 
         const newState = {
           lunches,
-          currentLunch,
+          currentLunchId: currentLunch.lunchId,
         };
 
         this.setState(newState);
@@ -58,36 +66,59 @@ class LunchForm extends Component {
     if (changeEvent.target) {
       const { name, value } = changeEvent.target;
       this.setState({
-        [name]: value,
+        form: {
+          [name]: value,
+        },
       });
     } else {
       this.setState({
-        willYouGoBack: changeEvent,
+        form: {
+          revisit: changeEvent,
+        },
       });
     }
   }
 
+  async withFetch(fn, name) {
+    this.props.fetch.add(name);
+    try {
+      await fn();
+    } finally {
+      this.props.fetch.remove(name);
+    }
+  }
+
+  async updateLunch(values) {
+  }
+
+  async createLunch(values) {
+    const { user: { appUserId } } = this.props;
+    this.withFetch(() => axios.post(`/api/user/${appUserId}/lunch`, values));
+  }
+
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+    const now = moment().format('YYYY-MM-DD');
     const postBody = {
-      whereDidYouEat: this.state.whereDidYouEat,
-      howMuchDidYouPay: this.state.howMuchDidYouPay.replace('$', ''),
-      willYouGoBack: this.state.willYouGoBack,
+      location: this.state.form.location,
+      cost: this.state.form.cost.replace('$', ''),
+      revisit: this.state.form.revisit,
+      lunchDate: now,
     };
-    this.props.fetch.add('lunchForm');
+
+    const fn = this.state.currentLunch ? this.updateLunch : this.createLunch;
+
     try {
-      await axios.post('/api/lunch', postBody);
+      await fn(postBody);
       this.setState({
         validationErrors: [],
-      })
+      });
     } catch (err) {
       if (err.response) {
         this.setState({
           validationErrors: err.response.data.errors.map(valErr => valErr.message),
         });
       }
-    } finally {
-      this.props.fetch.remove('lunchForm');
     }
   }
 
@@ -96,35 +127,40 @@ class LunchForm extends Component {
     const validationList = <ul>{validationListItems}</ul>;
     const validationDiv = <div className="alert alert-danger">{validationList}</div>;
 
+    const currentLunch = this.state.lunches[this.state.currentLunchId]
+    const location = currentLunch ? currentLunch.location : this.state.form.location;
+    const cost = currentLunch ? currentLunch.cost : this.state.form.cost;
+    const revisit = currentLunch ? currentLunch.revisit : this.state.form.revisit;
+
     return (
       <Col md={4}>
         {this.state.validationErrors.length ? validationDiv : null}
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="lunchFormWhereDidYouEat">
+          <FormGroup controlId="lunchFormlocation">
             <ControlLabel>Where did you eat?</ControlLabel>
             <FormControl
               type="text"
-              name="whereDidYouEat"
-              value={this.state.whereDidYouEat}
+              name="location"
+              value={location}
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup controlId="lunchFormHowMuchDidYouPay">
+          <FormGroup controlId="lunchFormcost">
             <ControlLabel>How much did you pay?</ControlLabel>
             <FormControl
               type="text"
-              name="howMuchDidYouPay"
-              value={this.state.howMuchDidYouPay}
+              name="cost"
+              value={cost}
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup controlId="willYouGoBack">
+          <FormGroup controlId="revisit">
             <ControlLabel>Will you go back?</ControlLabel>
             <ButtonToolbar>
               <ToggleButtonGroup
                 type="radio"
-                name="willYouGoBack"
-                value={this.state.willYouGoBack}
+                name="revisit"
+                value={revisit}
                 onChange={this.handleChange}
               >
                 <ToggleButton value="unsure" >Unsure</ToggleButton>

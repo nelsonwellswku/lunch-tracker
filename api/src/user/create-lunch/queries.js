@@ -8,7 +8,7 @@ const createLunch = async (lunch) => {
       Location: lunch.location,
       Cost: lunch.cost,
       Revisit: lunch.revisit,
-      LunchDate: lunch.date,
+      LunchDate: lunch.lunchDate,
     })
     .into('Lunch')
     .returning('LunchId');
@@ -25,7 +25,7 @@ const updateLunch = async (lunch) => {
       Location: lunch.location,
       Cost: lunch.cost,
       Revisit: lunch.revisit,
-      LunchDate: lunch.date,
+      LunchDate: lunch.lunchDate,
     })
     .returning('LunchId');
 

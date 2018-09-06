@@ -11,7 +11,7 @@ const getLunch = async ({ appUserId, date }) => {
   }
 
   const lunches = await queryBuilder
-    .orderBy('LunchDate', 'asc')
+    .orderBy('LunchDate', 'desc')
     .select('LunchId', 'Location', 'Cost', 'Revisit', 'LunchDate');
 
   return lunches.map(camelCaseKeys);

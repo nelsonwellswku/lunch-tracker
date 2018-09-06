@@ -5,7 +5,7 @@ const createLunch = async (req, res) => {
     location,
     cost,
     revisit,
-    date,
+    lunchDate,
   } = req.body;
   const { appUserId } = req.params;
 
@@ -14,7 +14,7 @@ const createLunch = async (req, res) => {
     location,
     cost,
     revisit,
-    date,
+    lunchDate,
   };
 
   const lunchId = await queries.createLunch(lunchToSave);

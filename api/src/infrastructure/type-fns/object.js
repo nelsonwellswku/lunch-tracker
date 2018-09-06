@@ -1,19 +1,13 @@
 const {
   compose,
-  curry,
   fromPairs,
   map,
+  adjust,
   toPairs,
 } = require('ramda');
-
 const { camelCase } = require('./string');
 
-const transformFirst = curry((fn, arr) => [
-  fn(arr[0]),
-  arr[1],
-]);
-
-const camelCasePairKey = map(transformFirst(camelCase));
+const camelCasePairKey = map(adjust(camelCase, 0));
 
 const camelCaseKeys = compose(
   fromPairs,

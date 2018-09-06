@@ -14,7 +14,7 @@ router.get(
   '/:appUserId/lunch',
   celebrate({
     query: {
-      date: Joi.date(),
+      lunchDate: Joi.date(),
     },
   }),
   handlers.getLunch,
@@ -27,7 +27,7 @@ router.post(
       location: Joi.string().required(),
       cost: Joi.number().precision(2),
       revisit: Joi.string().required(),
-      date: Joi.date().required(),
+      lunchDate: Joi.date().required(),
     },
   }),
   handlers.createLunch,
@@ -40,7 +40,7 @@ router.put(
       location: Joi.string().required(),
       cost: Joi.number().precision(2),
       revisit: Joi.string().required(),
-      date: Joi.date().required(),
+      lunchDate: Joi.date().required(),
     },
   }),
   handlers.updateLunch,
