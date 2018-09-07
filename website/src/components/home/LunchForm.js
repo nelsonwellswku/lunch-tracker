@@ -11,7 +11,6 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import moment from 'moment';
-import { formatAsCurrency } from '../../presentation';
 
 class LunchForm extends Component {
   constructor() {
@@ -42,17 +41,19 @@ class LunchForm extends Component {
       fetch.add('currentLunch');
       const results = await axios.get(`/api/user/${user.appUserId}/lunch`);
       if (results && results.data) {
-        const lunches = results.data.reduce((prev, curr) => {
-          return {
-            [curr.lunchId]: curr,
-            ...prev,
-          };
-        }, {});
+        const lunches = results.data.reduce((prev, curr) => ({
+          [curr.lunchId]: curr,
+          ...prev,
+        }), {});
         const currentLunch = results.data.find(x => x.lunchDate === now) || {};
 
         const newState = {
           lunches,
-          currentLunchId: currentLunch.lunchId,
+          currentLunchId: currentLunch.lunchId || '',
+          form: {
+            ...this.state.form,
+            ...currentLunch,
+          },
         };
 
         this.setState(newState);
@@ -63,16 +64,20 @@ class LunchForm extends Component {
   }
 
   handleChange(changeEvent) {
-    if (changeEvent.target) {
-      const { name, value } = changeEvent.target;
+    const { target } = changeEvent;
+
+    if (target) {
+      const { name, value } = target;
       this.setState({
         form: {
+          ...this.state.form,
           [name]: value,
         },
       });
     } else {
       this.setState({
         form: {
+          ...this.state.form,
           revisit: changeEvent,
         },
       });
@@ -89,6 +94,9 @@ class LunchForm extends Component {
   }
 
   async updateLunch(values) {
+    const { currentLunchId: lunchId } = this.state;
+    const { user: { appUserId } } = this.props;
+    this.withFetch(() => axios.put(`api/user/${appUserId}/lunch/${lunchId}`, values));
   }
 
   async createLunch(values) {
@@ -101,12 +109,12 @@ class LunchForm extends Component {
     const now = moment().format('YYYY-MM-DD');
     const postBody = {
       location: this.state.form.location,
-      cost: this.state.form.cost.replace('$', ''),
+      cost: this.state.form.cost,
       revisit: this.state.form.revisit,
       lunchDate: now,
     };
 
-    const fn = this.state.currentLunch ? this.updateLunch : this.createLunch;
+    const fn = this.state.currentLunchId ? this.updateLunch : this.createLunch;
 
     try {
       await fn(postBody);
@@ -127,10 +135,7 @@ class LunchForm extends Component {
     const validationList = <ul>{validationListItems}</ul>;
     const validationDiv = <div className="alert alert-danger">{validationList}</div>;
 
-    const currentLunch = this.state.lunches[this.state.currentLunchId]
-    const location = currentLunch ? currentLunch.location : this.state.form.location;
-    const cost = currentLunch ? currentLunch.cost : this.state.form.cost;
-    const revisit = currentLunch ? currentLunch.revisit : this.state.form.revisit;
+    const { location, cost, revisit } = this.state.form;
 
     return (
       <Col md={4}>

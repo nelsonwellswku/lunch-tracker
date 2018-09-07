@@ -28,7 +28,6 @@ class MainNav extends Component {
 
   render() {
     const { fetching } = this.props;
-    console.log(fetching);
     const logInOrLogOut = this.getLogButton();
     const getRegisterButton = this.getRegisterButton();
     return (
