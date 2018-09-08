@@ -8,7 +8,7 @@ const createLunch = async (lunch) => {
       Location: lunch.location,
       Cost: lunch.cost,
       Revisit: lunch.revisit,
-      LunchDate: lunch.date,
+      LunchDate: lunch.lunchDate,
     })
     .into('Lunch')
     .returning('LunchId');
@@ -25,14 +25,14 @@ const updateLunch = async (lunch) => {
       Location: lunch.location,
       Cost: lunch.cost,
       Revisit: lunch.revisit,
-      LunchDate: lunch.date,
+      LunchDate: lunch.lunchDate,
     })
     .returning('LunchId');
 
   return lunchId;
 };
 
-const getLunch = async ({ appUserId, date }) => {
+const getLunchId = async ({ appUserId, date }) => {
   const startOfDay = moment.utc(date).startOf('day').format();
   const endOfDay = moment.utc(date).endOf('day').format();
 
@@ -54,5 +54,5 @@ const getLunch = async ({ appUserId, date }) => {
 module.exports = {
   createLunch,
   updateLunch,
-  getLunch,
+  getLunchId,
 };

@@ -16,6 +16,10 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  if (err instanceof errors.Unauthorized) {
+    return res.sendStatus(401);
+  }
+
   if (err instanceof errors.NotImplemented) {
     return res.sendStatus(501);
   }

@@ -5,7 +5,7 @@ import LunchForm from './LunchForm';
 const HomePage = (props) => {
   const isLoggedIn = !!props.user;
   const promptForUserAction = isLoggedIn ?
-    <LunchForm fetch={props.fetch} /> :
+    <LunchForm fetch={props.fetch} user={props.user} /> :
     <RegistrationCallToAction />;
 
   return (
