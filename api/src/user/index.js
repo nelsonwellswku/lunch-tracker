@@ -1,14 +1,12 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const passport = require('../middleware/passport');
+const authorize = require('./authorize');
 const handlers = require('./handlers');
 
 const router = express.Router();
 
 router.use(passport.authenticate('jwt', { session: false }));
-
-// TODO: Add middleware here to enforce that the appUserId in the
-// params of the route is the same as the logged in user's appUserId
 
 router.get(
   '/:appUserId/lunch',
@@ -17,6 +15,7 @@ router.get(
       lunchDate: Joi.date(),
     },
   }),
+  authorize,
   handlers.getLunch,
 );
 
@@ -30,6 +29,7 @@ router.post(
       lunchDate: Joi.date().required(),
     },
   }),
+  authorize,
   handlers.createLunch,
 );
 
@@ -43,6 +43,7 @@ router.put(
       lunchDate: Joi.date().required(),
     },
   }),
+  authorize,
   handlers.updateLunch,
 );
 

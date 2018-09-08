@@ -12,7 +12,15 @@ class Client extends Error {
   }
 }
 
+class Unauthorized extends Error {
+  constructor(message) {
+    super();
+    this.message = message || 'Unauthorized';
+  }
+}
+
 module.exports = {
-  NotImplemented,
   Client,
+  NotImplemented,
+  Unauthorized,
 };
