@@ -26,7 +26,8 @@ class LunchForm extends Component {
       },
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleButtonChange = this.handleButtonChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.withFetch = this.withFetch.bind(this);
     this.createLunch = this.createLunch.bind(this);
@@ -63,25 +64,25 @@ class LunchForm extends Component {
     }
   }
 
-  handleChange(changeEvent) {
+  handleTextChange(changeEvent) {
     const { target } = changeEvent;
+    const { name, value } = target;
 
-    if (target) {
-      const { name, value } = target;
-      this.setState({
-        form: {
-          ...this.state.form,
-          [name]: value,
-        },
-      });
-    } else {
-      this.setState({
-        form: {
-          ...this.state.form,
-          revisit: changeEvent,
-        },
-      });
-    }
+    this.setState({
+      form: {
+        ...this.state.form,
+        [name]: value,
+      },
+    });
+  }
+
+  handleButtonChange(changeEvent) {
+    this.setState({
+      form: {
+        ...this.state.form,
+        revisit: changeEvent,
+      },
+    });
   }
 
   async withFetch(fn, name) {
@@ -147,16 +148,18 @@ class LunchForm extends Component {
               type="text"
               name="location"
               value={location}
-              onChange={this.handleChange}
+              onChange={this.handleTextChange}
             />
           </FormGroup>
           <FormGroup controlId="lunchFormcost">
             <ControlLabel>How much did you pay?</ControlLabel>
             <FormControl
-              type="text"
+              type="number"
+              min="1.00"
+              step=".01"
               name="cost"
               value={cost}
-              onChange={this.handleChange}
+              onChange={this.handleTextChange}
             />
           </FormGroup>
           <FormGroup controlId="revisit">
@@ -166,7 +169,7 @@ class LunchForm extends Component {
                 type="radio"
                 name="revisit"
                 value={revisit}
-                onChange={this.handleChange}
+                onChange={this.handleButtonChange}
               >
                 <ToggleButton value="unsure" >Unsure</ToggleButton>
                 <ToggleButton value="yes">Yes</ToggleButton>
