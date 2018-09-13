@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { createFetcher } from '../../api/fetchFactory';
 
 class RegistrationForm extends Component {
@@ -90,9 +89,5 @@ class RegistrationForm extends Component {
       </Col>);
   }
 }
-
-RegistrationForm.propTypes = {
-  onSuccessfulRegistration: PropTypes.func.isRequired,
-};
 
 export default RegistrationForm;

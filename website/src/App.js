@@ -82,7 +82,8 @@ class App extends Component {
   homePage() {
     return (<HomePage
       user={this.state.user}
-      fetch={({ add: this.addFetch, remove: this.removeFetch })}
+      addFetch={this.addFetch}
+      removeFetch={this.removeFetch}
       logOut={this.logOut}
     />);
   }

@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export const createFetcher = ({
   onUnauthorized = () => undefined,
+  onPrefetch = () => undefined,
+  onPostfetch = () => undefined,
 } = {}) => {
   const fetch = axios.create();
 
@@ -10,10 +12,19 @@ export const createFetcher = ({
     axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
-  fetch.interceptors.response.use(response => response, (error) => {
+  fetch.interceptors.request.use((config) => {
+    onPrefetch();
+    return config;
+  }, error => Promise.reject(error));
+
+  fetch.interceptors.response.use((response) => {
+    onPostfetch();
+    return response;
+  }, (error) => {
     if (error.response.status === 401) {
       onUnauthorized();
     }
+    onPostfetch();
     Promise.reject(error);
   });
 

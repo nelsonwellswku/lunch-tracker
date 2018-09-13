@@ -16,7 +16,6 @@ class LunchForm extends Component {
   constructor() {
     super();
     this.state = {
-      lunches: {},
       currentLunchId: null,
       validationErrors: [],
       form: {
@@ -29,38 +28,39 @@ class LunchForm extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleButtonChange = this.handleButtonChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.withFetch = this.withFetch.bind(this);
     this.createLunch = this.createLunch.bind(this);
     this.updateLunch = this.updateLunch.bind(this);
   }
 
   async componentWillMount() {
     const now = moment().format('YYYY-MM-DD');
-    const { fetch, user, logOut } = this.props;
+    const {
+      addFetch,
+      removeFetch,
+      user,
+      logOut,
+    } = this.props;
 
-    try {
-      fetch.add('currentLunch');
-      const results = await createFetcher({ onUnauthorized: logOut }).get(`/api/user/${user.appUserId}/lunch`);
-      if (results && results.data) {
-        const lunches = results.data.reduce((prev, curr) => ({
-          [curr.lunchId]: curr,
-          ...prev,
-        }), {});
-        const currentLunch = results.data.find(x => x.lunchDate === now) || {};
+    const fetchName = 'currentLunch';
 
-        const newState = {
-          lunches,
-          currentLunchId: currentLunch.lunchId || '',
-          form: {
-            ...this.state.form,
-            ...currentLunch,
-          },
-        };
+    const results = await createFetcher({
+      onUnauthorized: logOut,
+      onPrefetch: () => addFetch(fetchName),
+      onPostfetch: () => removeFetch(fetchName),
+    }).get(`/api/user/${user.appUserId}/lunch`);
 
-        this.setState(newState);
-      }
-    } finally {
-      fetch.remove('currentLunch');
+    if (results && results.data) {
+      const currentLunch = results.data.find(x => x.lunchDate === now) || {};
+
+      const newState = {
+        currentLunchId: currentLunch.lunchId || '',
+        form: {
+          ...this.state.form,
+          ...currentLunch,
+        },
+      };
+
+      this.setState(newState);
     }
   }
 
@@ -85,24 +85,35 @@ class LunchForm extends Component {
     });
   }
 
-  async withFetch(fn, name) {
-    this.props.fetch.add(name);
-    try {
-      await fn();
-    } finally {
-      this.props.fetch.remove(name);
-    }
-  }
-
   async updateLunch(values) {
     const { currentLunchId: lunchId } = this.state;
-    const { user: { appUserId }, logout } = this.props;
-    this.withFetch(() => createFetcher({ onUnauthorized: logout }).put(`api/user/${appUserId}/lunch/${lunchId}`, values));
+    const {
+      user: { appUserId },
+      logout,
+      addFetch,
+      removeFetch,
+    } = this.props;
+    const fetchName = 'updateLunch';
+    createFetcher({
+      onUnauthorized: logout,
+      onPrefetch: () => addFetch(fetchName),
+      onPostfetch: () => removeFetch(fetchName),
+    }).put(`api/user/${appUserId}/lunch/${lunchId}`, values);
   }
 
   async createLunch(values) {
-    const { user: { appUserId }, logOut } = this.props;
-    this.withFetch(() => createFetcher({ onUnauthorized: logOut }).post(`/api/user/${appUserId}/lunch`, values));
+    const {
+      user: { appUserId },
+      logout,
+      addFetch,
+      removeFetch,
+    } = this.props;
+    const fetchName = 'createLunch';
+    createFetcher({
+      onUnauthorized: logout,
+      onPrefetch: () => addFetch(fetchName),
+      onPostfetch: () => removeFetch(fetchName),
+    }).post(`/api/user/${appUserId}/lunch`, values);
   }
 
   async handleSubmit(submitEvent) {
