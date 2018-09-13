@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Grid } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
-import axios from 'axios';
 import './App.css';
 import HomePage from './components/home/HomePage';
 import MainNav from './components/main-nav/MainNav';
@@ -21,6 +20,7 @@ class App extends Component {
     this.homePage = this.homePage.bind(this);
     this.logInPage = this.logInPage.bind(this);
     this.logOutPage = this.logOutPage.bind(this);
+    this.registrationPage = this.registrationPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
     this.addFetch = this.addFetch.bind(this);
@@ -34,7 +34,6 @@ class App extends Component {
       this.setState({
         user,
       });
-      axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
     }
   }
 
@@ -64,7 +63,6 @@ class App extends Component {
     this.setState({
       user: null,
     });
-    delete axios.defaults.headers.common.Authorization;
   }
 
   logIn(authToken) {
@@ -72,11 +70,14 @@ class App extends Component {
     this.setState({
       user: jwtDecode(authToken),
     });
-    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
   logInPage() {
-    return <LogInPage logIn={this.logIn} />;
+    return (<LogInPage
+      logIn={this.logIn}
+      addFetch={this.addFetch}
+      removeFetch={this.removeFetch}
+    />);
   }
 
   logOutPage() {
@@ -86,8 +87,19 @@ class App extends Component {
   homePage() {
     return (<HomePage
       user={this.state.user}
-      fetch={({ add: this.addFetch, remove: this.removeFetch })}
+      addFetch={this.addFetch}
+      removeFetch={this.removeFetch}
+      logOut={this.logOut}
     />);
+  }
+
+  registrationPage() {
+    return (
+      <RegistrationPage
+        addFetch={this.addFetch}
+        removeFetch={this.removeFetch}
+      />
+    );
   }
 
   render() {
@@ -100,7 +112,7 @@ class App extends Component {
             <Route exact path="/" render={this.homePage} />
             <Route path="/authentication/login" render={this.logInPage} />
             <Route path="/authentication/logout" render={this.logOutPage} />
-            <Route path="/authentication/register" component={RegistrationPage} />
+            <Route path="/authentication/register" render={this.registrationPage} />
           </Grid>
         </Router>
       </div>

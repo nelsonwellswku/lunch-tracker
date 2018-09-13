@@ -2,10 +2,20 @@ import React from 'react';
 import RegistrationCallToAction from './RegistrationCallToAction';
 import LunchForm from './LunchForm';
 
-const HomePage = (props) => {
-  const isLoggedIn = !!props.user;
+const HomePage = ({
+  user,
+  addFetch,
+  removeFetch,
+  logOut,
+}) => {
+  const isLoggedIn = !!user;
   const promptForUserAction = isLoggedIn ?
-    <LunchForm fetch={props.fetch} user={props.user} /> :
+    (<LunchForm
+      addFetch={addFetch}
+      removeFetch={removeFetch}
+      user={user}
+      logOut={logOut}
+    />) :
     <RegistrationCallToAction />;
 
   return (

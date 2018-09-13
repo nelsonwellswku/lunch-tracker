@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
-import axios from 'axios';
-import PropTypes from 'prop-types';
+import { createFetcher } from '../../api/fetchFactory';
 
 class RegistrationForm extends Component {
   constructor() {
@@ -26,13 +25,20 @@ class RegistrationForm extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+
+    const { addFetch, removeFetch } = this.props;
+
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
       passwordConfirmation: this.state.passwordConfirmation,
     };
+    const fetchName = 'registrationForm';
     try {
-      await axios.post('/api/authentication/registerUser', postBody);
+      await createFetcher({
+        onPrefetch: () => addFetch(fetchName),
+        onPostfetch: () => removeFetch(fetchName),
+      }).post('/api/authentication/registerUser', postBody);
       this.setState({
         validationErrors: [],
       });
@@ -90,9 +96,5 @@ class RegistrationForm extends Component {
       </Col>);
   }
 }
-
-RegistrationForm.propTypes = {
-  onSuccessfulRegistration: PropTypes.func.isRequired,
-};
 
 export default RegistrationForm;
