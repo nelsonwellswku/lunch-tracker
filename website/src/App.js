@@ -73,7 +73,11 @@ class App extends Component {
   }
 
   logInPage() {
-    return <LogInPage logIn={this.logIn} />;
+    return (<LogInPage
+      logIn={this.logIn}
+      addFetch={this.addFetch}
+      removeFetch={this.removeFetch}
+    />);
   }
 
   logOutPage() {

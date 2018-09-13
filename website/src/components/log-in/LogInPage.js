@@ -28,12 +28,17 @@ class LogInPage extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+    const { addFetch, removeFetch } = this.props;
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
     };
+    const fetchName = 'loginForm';
     try {
-      const logInResult = await createFetcher().post('/api/authentication/login', postBody);
+      const logInResult = await createFetcher({
+        onPrefetch: () => addFetch(fetchName),
+        onPostfetch: () => removeFetch(fetchName),
+      }).post('/api/authentication/login', postBody);
       this.logIn(logInResult.data.token);
       this.setState({
         isLoggedIn: true,
