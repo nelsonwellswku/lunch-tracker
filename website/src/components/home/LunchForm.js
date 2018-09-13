@@ -9,8 +9,8 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from 'react-bootstrap';
-import axios from 'axios';
 import moment from 'moment';
+import { createFetcher } from '../../api/fetchFactory';
 
 class LunchForm extends Component {
   constructor() {
@@ -36,11 +36,11 @@ class LunchForm extends Component {
 
   async componentWillMount() {
     const now = moment().format('YYYY-MM-DD');
-    const { fetch, user } = this.props;
+    const { fetch, user, logOut } = this.props;
 
     try {
       fetch.add('currentLunch');
-      const results = await axios.get(`/api/user/${user.appUserId}/lunch`);
+      const results = await createFetcher({ onUnauthorized: logOut }).get(`/api/user/${user.appUserId}/lunch`);
       if (results && results.data) {
         const lunches = results.data.reduce((prev, curr) => ({
           [curr.lunchId]: curr,
@@ -96,13 +96,13 @@ class LunchForm extends Component {
 
   async updateLunch(values) {
     const { currentLunchId: lunchId } = this.state;
-    const { user: { appUserId } } = this.props;
-    this.withFetch(() => axios.put(`api/user/${appUserId}/lunch/${lunchId}`, values));
+    const { user: { appUserId }, logout } = this.props;
+    this.withFetch(() => createFetcher({ onUnauthorized: logout }).put(`api/user/${appUserId}/lunch/${lunchId}`, values));
   }
 
   async createLunch(values) {
-    const { user: { appUserId } } = this.props;
-    this.withFetch(() => axios.post(`/api/user/${appUserId}/lunch`, values));
+    const { user: { appUserId }, logOut } = this.props;
+    this.withFetch(() => createFetcher({ onUnauthorized: logOut }).post(`/api/user/${appUserId}/lunch`, values));
   }
 
   async handleSubmit(submitEvent) {
