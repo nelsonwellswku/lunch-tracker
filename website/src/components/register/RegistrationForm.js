@@ -25,13 +25,20 @@ class RegistrationForm extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+
+    const { addFetch, removeFetch } = this.props;
+
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
       passwordConfirmation: this.state.passwordConfirmation,
     };
+    const fetchName = 'registrationForm';
     try {
-      await createFetcher().post('/api/authentication/registerUser', postBody);
+      await createFetcher({
+        onPrefetch: () => addFetch(fetchName),
+        onPostfetch: () => removeFetch(fetchName),
+      }).post('/api/authentication/registerUser', postBody);
       this.setState({
         validationErrors: [],
       });

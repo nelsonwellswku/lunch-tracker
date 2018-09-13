@@ -19,9 +19,14 @@ class RegistrationPage extends Component {
   }
 
   render() {
+    const { addFetch, removeFetch } = this.props;
     return this.state.isRegistrationSuccessful ?
       (<SuccessfulRegistration />) :
-      (<RegistrationForm onSuccessfulRegistration={this.handleSuccessfulRegistration} />);
+      (<RegistrationForm
+        onSuccessfulRegistration={this.handleSuccessfulRegistration}
+        addFetch={addFetch}
+        removeFetch={removeFetch}
+      />);
   }
 }
 

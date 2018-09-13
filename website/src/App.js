@@ -20,6 +20,7 @@ class App extends Component {
     this.homePage = this.homePage.bind(this);
     this.logInPage = this.logInPage.bind(this);
     this.logOutPage = this.logOutPage.bind(this);
+    this.registrationPage = this.registrationPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
     this.addFetch = this.addFetch.bind(this);
@@ -88,6 +89,15 @@ class App extends Component {
     />);
   }
 
+  registrationPage() {
+    return (
+      <RegistrationPage
+        addFetch={this.addFetch}
+        removeFetch={this.removeFetch}
+      />
+    );
+  }
+
   render() {
     return (
       <div>
@@ -98,7 +108,7 @@ class App extends Component {
             <Route exact path="/" render={this.homePage} />
             <Route path="/authentication/login" render={this.logInPage} />
             <Route path="/authentication/logout" render={this.logOutPage} />
-            <Route path="/authentication/register" component={RegistrationPage} />
+            <Route path="/authentication/register" render={this.registrationPage} />
           </Grid>
         </Router>
       </div>
