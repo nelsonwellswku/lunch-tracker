@@ -25,7 +25,7 @@ export const createFetcher = ({
       onUnauthorized();
     }
     onPostfetch();
-    Promise.reject(error);
+    return Promise.reject(error);
   });
 
   return fetch;

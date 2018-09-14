@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import Redirect from 'react-router-dom/Redirect';
-import PropTypes from 'prop-types';
 import { createFetcher } from '../../api/fetchFactory';
 
 class LogInPage extends Component {
@@ -91,9 +90,5 @@ class LogInPage extends Component {
       </Col>);
   }
 }
-
-LogInPage.propTypes = {
-  logIn: PropTypes.func.isRequired,
-};
 
 export default LogInPage;

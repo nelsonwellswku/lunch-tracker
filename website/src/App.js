@@ -3,11 +3,11 @@ import { Grid } from 'react-bootstrap';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import './App.css';
-import HomePage from './components/home/HomePage';
-import MainNav from './components/main-nav/MainNav';
-import RegistrationPage from './components/register/RegistrationPage';
-import LogInPage from './components/log-in/LogInPage';
-import LogOutPage from './components/log-out/LogOutPage';
+import HomePage from './pages/home/HomePage';
+import RegistrationPage from './pages/register/RegistrationPage';
+import LogInPage from './pages/log-in/LogInPage';
+import LogOutPage from './pages/log-out/LogOutPage';
+import MainNav from './components/MainNav';
 
 class App extends Component {
   constructor() {
