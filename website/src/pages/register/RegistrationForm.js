@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
+import ValidationMessages from '../../components/ValidationMessages';
 
 class RegistrationForm extends Component {
   constructor() {
@@ -53,13 +54,10 @@ class RegistrationForm extends Component {
   }
 
   render() {
-    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
-    const validationList = <ul>{validationListItems}</ul>;
-    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
     return (
       <Col md={4}>
         <h1>Register</h1>
-        {this.state.validationErrors.length ? validationDiv : null}
+        <ValidationMessages errors={this.state.validationErrors} />
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="registrationFormEmailAddress">
             <ControlLabel>Email address</ControlLabel>

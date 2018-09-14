@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment';
 import { createFetcher } from '../../api/fetchFactory';
+import ValidationMessages from '../../components/ValidationMessages';
 
 class LunchForm extends Component {
   constructor() {
@@ -85,7 +86,7 @@ class LunchForm extends Component {
     });
   }
 
-  async updateLunch(values) {
+  updateLunch(values) {
     const { currentLunchId: lunchId } = this.state;
     const {
       user: { appUserId },
@@ -94,14 +95,14 @@ class LunchForm extends Component {
       removeFetch,
     } = this.props;
     const fetchName = 'updateLunch';
-    createFetcher({
+    return createFetcher({
       onUnauthorized: logout,
       onPrefetch: () => addFetch(fetchName),
       onPostfetch: () => removeFetch(fetchName),
     }).put(`api/user/${appUserId}/lunch/${lunchId}`, values);
   }
 
-  async createLunch(values) {
+  createLunch(values) {
     const {
       user: { appUserId },
       logout,
@@ -109,7 +110,7 @@ class LunchForm extends Component {
       removeFetch,
     } = this.props;
     const fetchName = 'createLunch';
-    createFetcher({
+    return createFetcher({
       onUnauthorized: logout,
       onPrefetch: () => addFetch(fetchName),
       onPostfetch: () => removeFetch(fetchName),
@@ -143,15 +144,11 @@ class LunchForm extends Component {
   }
 
   render() {
-    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
-    const validationList = <ul>{validationListItems}</ul>;
-    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
-
     const { location, cost, revisit } = this.state.form;
 
     return (
       <Col md={4}>
-        {this.state.validationErrors.length ? validationDiv : null}
+        <ValidationMessages errors={this.state.validationErrors} />
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="lunchFormlocation">
             <ControlLabel>Where did you eat?</ControlLabel>

@@ -23,9 +23,9 @@ router.post(
   '/:appUserId/lunch',
   celebrate({
     body: {
-      location: Joi.string().required(),
-      cost: Joi.number().precision(2),
-      revisit: Joi.string().required(),
+      location: Joi.string().max(60).required(),
+      cost: Joi.number().max(100.00).precision(2),
+      revisit: Joi.string().valid('unsure', 'yes', 'no').required(),
       lunchDate: Joi.date().required(),
     },
   }),
@@ -37,9 +37,9 @@ router.put(
   '/:appUserId/lunch/:lunchId',
   celebrate({
     body: {
-      location: Joi.string().required(),
-      cost: Joi.number().precision(2),
-      revisit: Joi.string().required(),
+      location: Joi.string().max(60).required(),
+      cost: Joi.number().max(100.00).precision(2),
+      revisit: Joi.string().valid('unsure', 'yes', 'no').required(),
       lunchDate: Joi.date().required(),
     },
   }),
