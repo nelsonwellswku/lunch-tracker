@@ -4,9 +4,9 @@ const mockQueries = {
   doesUserExist: jest.fn(),
   createAppUser: jest.fn(),
 };
-jest.mock('./queries', () => mockQueries);
+jest.mock('../queries', () => mockQueries);
 
-const registerUser = require('./index');
+const registerUser = require('../index');
 
 beforeEach(() => {
   mockQueries.doesUserExist.mockClear();
