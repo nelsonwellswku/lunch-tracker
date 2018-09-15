@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`app component renders without crashing 1`] = `
+<div>
+  <MainNav
+    fetching={Object {}}
+    user={null}
+  />
+  <BrowserRouter>
+    <Grid
+      bsClass="container"
+      componentClass="div"
+      fluid={false}
+    >
+      <Route
+        exact={true}
+        path="/"
+        render={[Function]}
+      />
+      <Route
+        path="/authentication/login"
+        render={[Function]}
+      />
+      <Route
+        path="/authentication/logout"
+        render={[Function]}
+      />
+      <Route
+        path="/authentication/register"
+        render={[Function]}
+      />
+    </Grid>
+  </BrowserRouter>
+</div>
+`;

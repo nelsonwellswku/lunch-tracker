@@ -1,7 +1,7 @@
 import React from 'react';
 
-const ValidationMessages = ({ errors } = {}) => {
-  if (!errors.length) { return null; }
+const ValidationMessages = ({ errors }) => {
+  if (!errors || !errors.length) { return null; }
 
   return (
     <div className="alert alert-danger">

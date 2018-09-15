@@ -7,12 +7,11 @@
     "bootstrap": "3",
     "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",
-    "prop-types": "^15.6.1",
-    "react": "^16.2.0",
-    "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.2.0",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.1"
+    "react": "^16.5.1",
+    "react-bootstrap": "^0.32.4",
+    "react-dom": "^16.5.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -20,5 +19,16 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://localhost:8000",
+  "devDependencies": {
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "enzyme-to-json": "^3.3.4",
+    "jest-localstorage-mock": "^2.2.0"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  }
 }
