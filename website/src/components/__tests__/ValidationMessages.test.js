@@ -10,8 +10,8 @@ describe('validation messages component', () => {
 
   test('returns an unordered list of error messages', () => {
     const errors = [
-      'This is error one',
-      'This is error two',
+      { message: 'This is error one' },
+      { message: 'This is error two' },
     ];
 
     const wrapper = shallow(<ValidationMessages errors={errors} />);

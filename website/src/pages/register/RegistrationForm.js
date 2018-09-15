@@ -47,7 +47,7 @@ class RegistrationForm extends Component {
     } catch (err) {
       if (err.response) {
         this.setState({
-          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+          validationErrors: err.response.data.errors,
         });
       }
     }

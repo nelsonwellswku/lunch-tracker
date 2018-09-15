@@ -6,7 +6,7 @@ const ValidationMessages = ({ errors }) => {
   return (
     <div className="alert alert-danger">
       <ul>
-        {errors.map(x => <li key={x}>{x}</li>)}
+        {errors.map(x => <li key={x.message}>{x.message}</li>)}
       </ul>
     </div>
   );
