@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
-import Redirect from 'react-router-dom/Redirect';
-import PropTypes from 'prop-types';
 import { createFetcher } from '../../api/fetchFactory';
+import ValidationMessages from '../../components/ValidationMessages';
 
-class LogInPage extends Component {
-  constructor(props) {
+class RegistrationForm extends Component {
+  constructor() {
     super();
     this.state = {
       emailAddress: '',
       password: '',
+      passwordConfirmation: '',
       validationErrors: [],
-      isLoggedIn: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.logIn = props.logIn;
   }
 
   handleChange(changeEvent) {
@@ -28,45 +26,40 @@ class LogInPage extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+
     const { addFetch, removeFetch } = this.props;
+
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
+      passwordConfirmation: this.state.passwordConfirmation,
     };
-    const fetchName = 'loginForm';
+    const fetchName = 'registrationForm';
     try {
-      const logInResult = await createFetcher({
+      await createFetcher({
         onPrefetch: () => addFetch(fetchName),
         onPostfetch: () => removeFetch(fetchName),
-      }).post('/api/authentication/login', postBody);
-      this.logIn(logInResult.data.token);
+      }).post('/api/authentication/registerUser', postBody);
       this.setState({
-        isLoggedIn: true,
         validationErrors: [],
       });
+      this.props.onSuccessfulRegistration();
     } catch (err) {
       if (err.response) {
         this.setState({
-          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+          validationErrors: err.response.data.errors,
         });
       }
     }
   }
 
   render() {
-    if (this.state.isLoggedIn) {
-      return <Redirect to="/" />;
-    }
-
-    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
-    const validationList = <ul>{validationListItems}</ul>;
-    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
     return (
       <Col md={4}>
-        <h1>Log In</h1>
-        {this.state.validationErrors.length ? validationDiv : null}
+        <h1>Register</h1>
+        <ValidationMessages errors={this.state.validationErrors} />
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="logInFormEmailAddress">
+          <FormGroup controlId="registrationFormEmailAddress">
             <ControlLabel>Email address</ControlLabel>
             <FormControl
               type="text"
@@ -76,7 +69,7 @@ class LogInPage extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup controlId="logInFormPassword">
+          <FormGroup controlId="registrationFormPassword">
             <ControlLabel>Password</ControlLabel>
             <FormControl
               type="password"
@@ -86,14 +79,20 @@ class LogInPage extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <Button type="submit">Log In</Button>
+          <FormGroup controlId="registrationFormPasswordConfirmation">
+            <ControlLabel>Password Confirmation</ControlLabel>
+            <FormControl
+              type="password"
+              name="passwordConfirmation"
+              value={this.state.passwordConfirmation}
+              placeholder="Confirm password"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <Button type="submit">Register</Button>
         </form >
       </Col>);
   }
 }
 
-LogInPage.propTypes = {
-  logIn: PropTypes.func.isRequired,
-};
-
-export default LogInPage;
+export default RegistrationForm;

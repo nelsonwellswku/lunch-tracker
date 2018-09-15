@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
+import Redirect from 'react-router-dom/Redirect';
 import { createFetcher } from '../../api/fetchFactory';
+import ValidationMessages from '../../components/ValidationMessages';
 
-class RegistrationForm extends Component {
-  constructor() {
+class LogInPage extends Component {
+  constructor(props) {
     super();
     this.state = {
       emailAddress: '',
       password: '',
-      passwordConfirmation: '',
       validationErrors: [],
+      isLoggedIn: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.logIn = props.logIn;
   }
 
   handleChange(changeEvent) {
@@ -25,43 +28,42 @@ class RegistrationForm extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
-
     const { addFetch, removeFetch } = this.props;
-
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
-      passwordConfirmation: this.state.passwordConfirmation,
     };
-    const fetchName = 'registrationForm';
+    const fetchName = 'loginForm';
     try {
-      await createFetcher({
+      const logInResult = await createFetcher({
         onPrefetch: () => addFetch(fetchName),
         onPostfetch: () => removeFetch(fetchName),
-      }).post('/api/authentication/registerUser', postBody);
+      }).post('/api/authentication/login', postBody);
+      this.logIn(logInResult.data.token);
       this.setState({
+        isLoggedIn: true,
         validationErrors: [],
       });
-      this.props.onSuccessfulRegistration();
     } catch (err) {
       if (err.response) {
         this.setState({
-          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+          validationErrors: err.response.data.errors,
         });
       }
     }
   }
 
   render() {
-    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
-    const validationList = <ul>{validationListItems}</ul>;
-    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
+    if (this.state.isLoggedIn) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Col md={4}>
-        <h1>Register</h1>
-        {this.state.validationErrors.length ? validationDiv : null}
+        <h1>Log In</h1>
+        <ValidationMessages errors={this.state.validationErrors} />
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="registrationFormEmailAddress">
+          <FormGroup controlId="logInFormEmailAddress">
             <ControlLabel>Email address</ControlLabel>
             <FormControl
               type="text"
@@ -71,7 +73,7 @@ class RegistrationForm extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup controlId="registrationFormPassword">
+          <FormGroup controlId="logInFormPassword">
             <ControlLabel>Password</ControlLabel>
             <FormControl
               type="password"
@@ -81,20 +83,10 @@ class RegistrationForm extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          <FormGroup controlId="registrationFormPasswordConfirmation">
-            <ControlLabel>Password Confirmation</ControlLabel>
-            <FormControl
-              type="password"
-              name="passwordConfirmation"
-              value={this.state.passwordConfirmation}
-              placeholder="Confirm password"
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <Button type="submit">Register</Button>
+          <Button type="submit">Log In</Button>
         </form >
       </Col>);
   }
 }
 
-export default RegistrationForm;
+export default LogInPage;

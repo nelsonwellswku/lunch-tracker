@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validation messages component returns an unordered list of error messages 1`] = `
+<div
+  className="alert alert-danger"
+>
+  <ul>
+    <li
+      key="This is error one"
+    >
+      This is error one
+    </li>
+    <li
+      key="This is error two"
+    >
+      This is error two
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`validation messages component returns nothing if no props are passed 1`] = `""`;
