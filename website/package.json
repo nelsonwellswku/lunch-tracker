@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "bootstrap": "3",
+    "bootstrap": "3.3.7",
     "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",
     "react": "^16.5.1",
