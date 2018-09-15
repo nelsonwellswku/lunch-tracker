@@ -16,9 +16,19 @@ const createAppUser = newUser => db
     EmailAddress: newUser.emailAddress,
     PasswordHash: newUser.passwordHash,
   })
-  .into('AppUser');
+  .into('AppUser')
+  .returning('AppUserId');
+
+const createRegistrationToken = (token, appUserId) => db
+  .queryBuilder()
+  .insert({
+    AppUserId: appUserId,
+    Token: token,
+  })
+  .into('RegistrationToken');
 
 module.exports = {
   doesUserExist,
   createAppUser,
+  createRegistrationToken,
 };
