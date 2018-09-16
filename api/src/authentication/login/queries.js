@@ -4,7 +4,10 @@ const getUser = async (emailAddress) => {
   const user = await db.queryBuilder()
     .first('AppUserId', 'PasswordHash')
     .from('AppUser')
-    .where({ EmailAddress: emailAddress });
+    .where({
+      EmailAddress: emailAddress,
+      Verified: true,
+    });
 
   if (user) {
     return {

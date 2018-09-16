@@ -1,7 +1,6 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const handlers = require('./handlers');
-const errors = require('../infrastructure/errors');
 
 const router = express.Router();
 
