@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
 const uuid = require('uuid/v4');
 const errors = require('../../infrastructure/errors');
-const sgMail = require('@sendgrid/mail');
 const db = require('../../infrastructure/database');
 const { doesUserExist, createAppUser, createRegistrationToken } = require('./queries');
+const sendMail = require('./send-mail');
 
 const registerUser = async (req, res) => {
   const { emailAddress, password } = req.body;
@@ -21,8 +21,18 @@ const registerUser = async (req, res) => {
     const appUserId = await createAppUser({ emailAddress, passwordHash }).transacting(trx);
     await createRegistrationToken(token, appUserId).transacting(trx);
 
-    // TODO: send registration email here
-    const link = `req.headers['Referer']/verify/${token}`;
+    const referer = req.get('referer');
+    const link = `${referer}/verify/${token}`;
+    await sendMail({
+      to: emailAddress,
+      from: 'lunchtracker@example.com', // obviously not
+      subject: 'Complete your lunch tracker registration',
+      text: `Visit this URL to complete registration: ${link}
+
+Thanks,
+
+Lunchtracker`,
+    });
   });
 
   res.sendStatus(201);

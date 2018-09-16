@@ -23,7 +23,7 @@ class RegistrationVerificationPage extends Component {
       await createFetcher({
         onPrefetch: () => addFetch(fetchName),
         onPostfetch: () => { removeFetch(fetchName); this.setState({ fetchingComplete: true }); },
-      }).post('/api/authentication/verify-registration-token', { verificationToken });
+      }).post('/api/authentication/verifyRegistrationToken', { verificationToken });
 
       this.setState({ isSuccessful: true });
     } catch (err) {

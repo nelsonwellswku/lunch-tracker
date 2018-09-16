@@ -21,6 +21,6 @@ const registerUserSchema = {
 
 router.post('/login', handlers.login);
 router.post('/registerUser', celebrate(registerUserSchema, { abortEarly: false }), handlers.registerUser);
-router.post('/verify-registration-token', handlers.verifyRegistrationToken);
+router.post('/verifyRegistrationToken', handlers.verifyRegistrationToken);
 
 module.exports = router;
