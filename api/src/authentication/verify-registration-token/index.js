@@ -3,13 +3,13 @@ const queries = require('./queries');
 
 const verifyRegistrationToken = async (req, res) => {
   const { verificationToken } = req.body;
-  const results = await queries.getAppUserIdForVerificationToken(verificationToken);
+  const appUserId = await queries.getAppUserIdForVerificationToken(verificationToken);
 
-  if (!results) {
+  if (!appUserId) {
     throw new errors.Client('Registration token has expired.');
   }
 
-  // TODO: Update the app user row in the db to flag it as verified
+  await queries.verifyUser(appUserId);
 
   return res.send();
 };

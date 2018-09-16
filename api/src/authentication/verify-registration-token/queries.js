@@ -15,6 +15,13 @@ const getAppUserIdForVerificationToken = async (verificationToken) => {
   return null;
 };
 
+const verifyUser = appUserId => db
+  .queryBuilder()
+  .into('AppUser')
+  .where('AppUserId', appUserId)
+  .update('Verified', 1);
+
 module.exports = {
   getAppUserIdForVerificationToken,
+  verifyUser,
 };
