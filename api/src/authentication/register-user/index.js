@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const uuid = require('uuid/v4');
 const errors = require('../../infrastructure/errors');
+const sgMail = require('@sendgrid/mail');
 const db = require('../../infrastructure/database');
 const { doesUserExist, createAppUser, createRegistrationToken } = require('./queries');
 
@@ -21,6 +22,7 @@ const registerUser = async (req, res) => {
     await createRegistrationToken(token, appUserId).transacting(trx);
 
     // TODO: send registration email here
+    const link = `req.headers['Referer']/verify/${token}`;
   });
 
   res.sendStatus(201);
