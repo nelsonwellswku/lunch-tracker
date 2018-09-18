@@ -18,8 +18,8 @@ const registerUser = async (req, res) => {
 
   await db.transaction(async (trx) => {
     const token = uuid();
-    const appUserId = await createAppUser({ emailAddress, passwordHash }).transacting(trx);
-    await createRegistrationToken(token, appUserId).transacting(trx);
+    const appUserId = await createAppUser(trx, { emailAddress, passwordHash });
+    await createRegistrationToken(trx, token, appUserId);
 
     const referer = req.get('referer');
     const link = `${referer}/verify/${token}`;

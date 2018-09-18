@@ -18,15 +18,22 @@ exports[`app component renders without crashing 1`] = `
         render={[Function]}
       />
       <Route
+        exact={true}
         path="/authentication/login"
         render={[Function]}
       />
       <Route
+        exact={true}
         path="/authentication/logout"
         render={[Function]}
       />
       <Route
+        exact={true}
         path="/authentication/register"
+        render={[Function]}
+      />
+      <Route
+        path="/authentication/register/verify/:verificationToken"
         render={[Function]}
       />
     </Grid>

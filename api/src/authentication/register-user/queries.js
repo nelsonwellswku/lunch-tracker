@@ -10,22 +10,24 @@ const doesUserExist = async (emailAddress) => {
   return rows.length > 0;
 };
 
-const createAppUser = newUser => db
+const createAppUser = (trx, newUser) => db
   .queryBuilder()
   .insert({
     EmailAddress: newUser.emailAddress,
     PasswordHash: newUser.passwordHash,
   })
   .into('AppUser')
-  .returning('AppUserId');
+  .returning('AppUserId')
+  .transacting(trx);
 
-const createRegistrationToken = (token, appUserId) => db
+const createRegistrationToken = (trx, token, appUserId) => db
   .queryBuilder()
   .insert({
     AppUserId: appUserId,
     Token: token,
   })
-  .into('RegistrationToken');
+  .into('RegistrationToken')
+  .transacting(trx);
 
 module.exports = {
   doesUserExist,
