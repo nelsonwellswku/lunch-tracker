@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 import './App.css';
 import HomePage from './pages/home/HomePage';
 import RegistrationPage from './pages/register/RegistrationPage';
+import RegistrationVerificationPage from './pages/registration-verification/RegistrationVerificationPage';
 import LogInPage from './pages/log-in/LogInPage';
 import LogOutPage from './pages/log-out/LogOutPage';
 import MainNav from './components/MainNav';
@@ -21,6 +22,7 @@ class App extends Component {
     this.logInPage = this.logInPage.bind(this);
     this.logOutPage = this.logOutPage.bind(this);
     this.registrationPage = this.registrationPage.bind(this);
+    this.registrationVerificationPage = this.registrationVerificationPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
     this.addFetch = this.addFetch.bind(this);
@@ -102,6 +104,15 @@ class App extends Component {
     );
   }
 
+  registrationVerificationPage(routeProps) {
+    return (
+      <RegistrationVerificationPage
+        addFetch={this.addFetch}
+        removeFetch={this.removeFetch}
+        {...routeProps}
+      />);
+  }
+
   render() {
     return (
       <div>
@@ -110,9 +121,13 @@ class App extends Component {
         <Router>
           <Grid>
             <Route exact path="/" render={this.homePage} />
-            <Route path="/authentication/login" render={this.logInPage} />
-            <Route path="/authentication/logout" render={this.logOutPage} />
-            <Route path="/authentication/register" render={this.registrationPage} />
+            <Route exact path="/authentication/login" render={this.logInPage} />
+            <Route exact path="/authentication/logout" render={this.logOutPage} />
+            <Route exact path="/authentication/register" render={this.registrationPage} />
+            <Route
+              path="/authentication/register/verify/:verificationToken"
+              render={routeProps => this.registrationVerificationPage(routeProps)}
+            />
           </Grid>
         </Router>
       </div>

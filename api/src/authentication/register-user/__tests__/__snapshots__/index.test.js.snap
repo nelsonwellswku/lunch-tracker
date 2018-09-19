@@ -4,10 +4,23 @@ exports[`register user endpoint; can register a new user: create app user 1`] = 
 [MockFunction] {
   "calls": Array [
     Array [
+      "testTransaction",
       Object {
         "emailAddress": "TestUsername",
         "passwordHash": "testHashedPassword",
       },
+    ],
+  ],
+}
+`;
+
+exports[`register user endpoint; can register a new user: creates registration token 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testTransaction",
+      "fakeUuid",
+      "fakeAppUserId",
     ],
   ],
 }
