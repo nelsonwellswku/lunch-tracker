@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import moment from 'moment';
+import { Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
 import LunchForm from './LunchForm';
+import LunchList from './LunchList';
 
 class LunchMasterDetail extends Component {
   constructor() {
@@ -19,6 +21,7 @@ class LunchMasterDetail extends Component {
         cost: '',
         revisit: 'unsure',
       },
+      lunches: [],
       currentLunchId: null,
       validationErrors: [],
     };
@@ -47,6 +50,7 @@ class LunchMasterDetail extends Component {
 
         const newState = {
           currentLunchId: currentLunch.lunchId || '',
+          lunches: results.data,
           form: {
             ...this.state.form,
             ...currentLunch,
@@ -145,17 +149,26 @@ class LunchMasterDetail extends Component {
     } = this.props;
 
     return (
-      <LunchForm
-        validationErrors={this.state.validationErrors}
-        handleTextChange={this.handleTextChange}
-        handleButtonChange={this.handleButtonChange}
-        handleSubmit={this.handleSubmit}
-        form={this.state.form}
-        addFetch={addFetch}
-        removeFetch={removeFetch}
-        user={user}
-        logOut={logOut}
-      />
+      <Fragment>
+        <Col md={4}>
+          <LunchForm
+            validationErrors={this.state.validationErrors}
+            handleTextChange={this.handleTextChange}
+            handleButtonChange={this.handleButtonChange}
+            handleSubmit={this.handleSubmit}
+            form={this.state.form}
+            addFetch={addFetch}
+            removeFetch={removeFetch}
+            user={user}
+            logOut={logOut}
+          />
+        </Col>
+        <Col md={2} />
+        <Col md={4}>
+          <LunchList lunches={this.state.lunches} />
+        </Col>
+        <Col md={2} />
+      </Fragment>
     );
   }
 }

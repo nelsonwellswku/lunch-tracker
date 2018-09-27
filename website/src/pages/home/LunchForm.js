@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   FormGroup,
   ControlLabel,
   FormControl,
   Button,
-  Col,
   ButtonToolbar,
   ToggleButtonGroup,
   ToggleButton,
@@ -16,7 +15,7 @@ const LunchForm = (props) => {
   const { handleTextChange, handleButtonChange, handleSubmit } = props;
 
   return (
-    <Col md={4}>
+    <Fragment>
       <ValidationMessages errors={props.validationErrors} />
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="lunchFormlocation">
@@ -56,7 +55,7 @@ const LunchForm = (props) => {
         </FormGroup>
         <Button type="submit">Save</Button>
       </form>
-    </Col>
+    </Fragment>
   );
 };
 
