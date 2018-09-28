@@ -20,6 +20,7 @@ class LunchMasterDetail extends Component {
         location: '',
         cost: '',
         revisit: 'unsure',
+        lunchDate: moment().format('YYYY-MM-DD'),
       },
       lunches: [],
       currentLunchId: null,
@@ -50,7 +51,7 @@ class LunchMasterDetail extends Component {
 
         const newState = {
           currentLunchId: currentLunch.lunchId || '',
-          lunches: results.data,
+          lunches: currentLunch.lunchId ? results.data : [null, ...results.data],
           form: {
             ...this.state.form,
             ...currentLunch,
@@ -60,6 +61,19 @@ class LunchMasterDetail extends Component {
         this.setState(newState);
       }
     }
+  }
+
+  setFormValueToLunchValues(index) {
+    const lunch = this.state.lunches[index];
+    this.setState({
+      form: {
+        location: lunch.location,
+        cost: lunch.cost,
+        revisit: lunch.revisit,
+        lunchDate: lunch.lunchDate,
+      },
+      currentLunchId: lunch.lunchId,
+    });
   }
 
   handleTextChange(changeEvent) {
@@ -116,12 +130,11 @@ class LunchMasterDetail extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
-    const now = moment().format('YYYY-MM-DD');
     const postBody = {
       location: this.state.form.location,
       cost: this.state.form.cost,
       revisit: this.state.form.revisit,
-      lunchDate: now,
+      lunchDate: this.state.form.lunchDate,
     };
 
     const fn = this.state.currentLunchId ? this.updateLunch : this.createLunch;
@@ -165,7 +178,7 @@ class LunchMasterDetail extends Component {
         </Col>
         <Col md={2} />
         <Col md={4}>
-          <LunchList lunches={this.state.lunches} />
+          <LunchList lunches={this.state.lunches} setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)} />
         </Col>
         <Col md={2} />
       </Fragment>

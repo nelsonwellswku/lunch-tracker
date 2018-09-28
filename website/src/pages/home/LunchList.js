@@ -1,15 +1,22 @@
 import React from 'react';
 
 const LunchList = (props) => {
-  const lunchListItems = props.lunches.map(lunch =>
-    (
-      <li key={lunch.lunchId}>
-        {lunch.location}
-      </li>));
+  const { lunches, setFormValueToLunchValues } = props;
+
+  const lunchListItems = lunches.map((lunch, index) => {
+    if (!lunch) {
+      return <li key={0}>No lunch yet!</li>;
+    }
+
+    return (
+      <li key={lunch.lunchId} onClick={() => setFormValueToLunchValues(index)}>
+        {lunch.lunchDate} - {lunch.location} - ${lunch.cost}
+      </li>);
+  });
 
   return (
     <div>
-      <p>Lunches</p>
+      <p>Recent Lunches</p>
       <ul>
         {lunchListItems}
       </ul>
