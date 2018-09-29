@@ -176,6 +176,7 @@ class LunchMasterDetail extends Component {
     return (
       <Fragment>
         <Col md={4}>
+          <h1>Lunch Log</h1>
           <LunchForm
             validationErrors={this.state.validationErrors}
             handleTextChange={this.handleTextChange}
@@ -188,14 +189,12 @@ class LunchMasterDetail extends Component {
             logOut={logOut}
           />
         </Col>
-        <Col md={2} />
         <Col md={4}>
           <LunchList
             lunches={this.state.lunches}
             setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)}
           />
         </Col>
-        <Col md={2} />
       </Fragment>
     );
   }

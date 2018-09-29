@@ -22,7 +22,6 @@ const HomePage = (props) => {
 
   return (
     <div>
-      <h1>Welcome to Lunch Tracker!</h1>
       {promptForUserAction}
     </div>
   );
