@@ -5,7 +5,7 @@ const LunchList = (props) => {
 
   const lunchListItems = lunches.map((lunch, index) => {
     if (!lunch) {
-      return <li key={0}>No lunch yet!</li>;
+      return <li key={0} onClick={() => setFormValueToLunchValues(index)}>No lunch yet!</li>;
     }
 
     return (

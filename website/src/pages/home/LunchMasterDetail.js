@@ -65,15 +65,27 @@ class LunchMasterDetail extends Component {
 
   setFormValueToLunchValues(index) {
     const lunch = this.state.lunches[index];
-    this.setState({
-      form: {
-        location: lunch.location,
-        cost: lunch.cost,
-        revisit: lunch.revisit,
-        lunchDate: lunch.lunchDate,
-      },
-      currentLunchId: lunch.lunchId,
-    });
+    if (!lunch) {
+      this.setState({
+        form: {
+          location: '',
+          cost: '',
+          revisit: 'unsure',
+          lunchDate: moment().format('YYYY-MM-DD'),
+        },
+        currentLunchId: null,
+      });
+    } else {
+      this.setState({
+        form: {
+          location: lunch.location,
+          cost: lunch.cost,
+          revisit: lunch.revisit,
+          lunchDate: lunch.lunchDate,
+        },
+        currentLunchId: lunch.lunchId,
+      });
+    }
   }
 
   handleTextChange(changeEvent) {
@@ -178,7 +190,10 @@ class LunchMasterDetail extends Component {
         </Col>
         <Col md={2} />
         <Col md={4}>
-          <LunchList lunches={this.state.lunches} setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)} />
+          <LunchList
+            lunches={this.state.lunches}
+            setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)}
+          />
         </Col>
         <Col md={2} />
       </Fragment>
