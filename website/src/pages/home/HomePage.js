@@ -1,16 +1,18 @@
 import React from 'react';
 import RegistrationCallToAction from './RegistrationCallToAction';
-import LunchForm from './LunchForm';
+import LunchMasterDetail from './LunchMasterDetail';
 
-const HomePage = ({
-  user,
-  addFetch,
-  removeFetch,
-  logOut,
-}) => {
+const HomePage = (props) => {
+  const {
+    user,
+    addFetch,
+    removeFetch,
+    logOut,
+  } = props;
+
   const isLoggedIn = !!user;
   const promptForUserAction = isLoggedIn ?
-    (<LunchForm
+    (<LunchMasterDetail
       addFetch={addFetch}
       removeFetch={removeFetch}
       user={user}
@@ -20,7 +22,6 @@ const HomePage = ({
 
   return (
     <div>
-      <h1>Welcome to Lunch Tracker!</h1>
       {promptForUserAction}
     </div>
   );
