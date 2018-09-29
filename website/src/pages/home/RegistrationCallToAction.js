@@ -7,8 +7,8 @@ const RegistrationCallToAction = () => {
     <Fragment>
       <h1>Welcome to Lunch Tracker!</h1>
       <p>
-        Get started by <a href={registrationUrl}>registering</a>
-        or <a href={loginUrl}>logging in.</a>
+        Get started
+        by <a href={registrationUrl}>registering</a> or <a href={loginUrl}>logging in.</a>
       </p>
     </Fragment>
   );
