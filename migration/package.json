@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "knex": "node ./node_modules/knex/bin/cli.js",
-    "local-up": "node ./node_modules/knex/bin/cli.js migrate:latest --env local",
-    "local-down": "node ./node_modules/knex/bin/cli.js migrate:rollback --env local"
+    "postgrator": "postgrator"
   },
   "dependencies": {
-    "dotenv": "^5.0.1",
-    "knex": "^0.14.4",
     "mssql": "^4.1.0"
+  },
+  "devDependencies": {
+    "postgrator-cli": "^3.0.0"
   }
 }

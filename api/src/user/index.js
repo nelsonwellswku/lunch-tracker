@@ -11,6 +11,9 @@ router.use(passport.authenticate('jwt', { session: false }));
 router.get(
   '/:appUserId/lunch',
   celebrate({
+    params: {
+      appUserId: Joi.number().integer(),
+    },
     query: {
       lunchDate: Joi.date(),
     },
@@ -22,6 +25,9 @@ router.get(
 router.post(
   '/:appUserId/lunch',
   celebrate({
+    params: {
+      appUserId: Joi.number().integer(),
+    },
     body: {
       location: Joi.string().max(60).required(),
       cost: Joi.number().max(100.00).precision(2),
@@ -36,6 +42,10 @@ router.post(
 router.put(
   '/:appUserId/lunch/:lunchId',
   celebrate({
+    params: {
+      appUserId: Joi.number().integer(),
+      lunchId: Joi.number().integer(),
+    },
     body: {
       location: Joi.string().max(60).required(),
       cost: Joi.number().max(100.00).precision(2),
