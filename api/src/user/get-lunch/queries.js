@@ -1,7 +1,12 @@
 const db = require('../../infrastructure/database');
 const { camelCaseKeys } = require('../../infrastructure/type-fns/object');
 
-const getLunch = async ({ appUserId, date }) => {
+const getLunches = async ({
+  appUserId,
+  date,
+  startDate,
+  endDate,
+}) => {
   const queryBuilder = db.queryBuilder()
     .from('Lunch')
     .limit(10)
@@ -9,6 +14,10 @@ const getLunch = async ({ appUserId, date }) => {
 
   if (date) {
     queryBuilder.where('LunchDate', date);
+  }
+
+  if (startDate && endDate) {
+    queryBuilder.whereBetween('LunchDate', startDate, endDate);
   }
 
   const lunches = await queryBuilder
@@ -19,5 +28,5 @@ const getLunch = async ({ appUserId, date }) => {
 };
 
 module.exports = {
-  getLunch,
+  getLunches,
 };
