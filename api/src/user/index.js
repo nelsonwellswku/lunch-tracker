@@ -16,10 +16,12 @@ router.get(
     },
     query: {
       lunchDate: Joi.date(),
+      startDate: Joi.date(),
+      endDate: Joi.date(),
     },
   }),
   authorize,
-  handlers.getLunch,
+  handlers.getLunches,
 );
 
 router.post(

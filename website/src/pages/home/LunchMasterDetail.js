@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
 import LunchForm from './LunchForm';
-import LunchList from './LunchList';
+import LunchCalendar from './LunchCalendar';
 
 class LunchMasterDetail extends Component {
   constructor() {
@@ -14,6 +14,7 @@ class LunchMasterDetail extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.createLunch = this.createLunch.bind(this);
     this.updateLunch = this.updateLunch.bind(this);
+    this.handleSelectEvent = this.handleSelectEvent.bind(this);
 
     this.state = {
       form: {
@@ -39,12 +40,14 @@ class LunchMasterDetail extends Component {
 
     if (user) {
       const fetchName = 'currentLunch';
+      const startDate = moment().startOf('month').format('YYYY-MM-DD');
+      const endDate = moment().endOf('month').format('YYYY-MM-DD');
 
       const results = await createFetcher({
         onUnauthorized: logOut,
         onPrefetch: () => addFetch(fetchName),
         onPostfetch: () => removeFetch(fetchName),
-      }).get(`/api/user/${user.appUserId}/lunch`);
+      }).get(`/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`);
 
       if (results && results.data) {
         const currentLunch = results.data.find(x => x.lunchDate === now) || {};
@@ -165,6 +168,11 @@ class LunchMasterDetail extends Component {
     }
   }
 
+  handleSelectEvent(selectEvent) {
+    const lunchIndex = this.state.lunches.findIndex(lunch => selectEvent.lunchId === lunch.lunchId);
+    this.setFormValueToLunchValues(lunchIndex);
+  }
+
   render() {
     const {
       addFetch,
@@ -189,10 +197,10 @@ class LunchMasterDetail extends Component {
             logOut={logOut}
           />
         </Col>
-        <Col md={4}>
-          <LunchList
+        <Col md={8}>
+          <LunchCalendar
             lunches={this.state.lunches}
-            setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)}
+            onSelectEvent={this.handleSelectEvent}
           />
         </Col>
       </Fragment>
