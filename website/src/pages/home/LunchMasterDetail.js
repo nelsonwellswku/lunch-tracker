@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
 import LunchForm from './LunchForm';
-import LunchList from './LunchList';
+import LunchCalendar from './LunchCalendar';
 
 class LunchMasterDetail extends Component {
   constructor() {
@@ -189,11 +189,8 @@ class LunchMasterDetail extends Component {
             logOut={logOut}
           />
         </Col>
-        <Col md={4}>
-          <LunchList
-            lunches={this.state.lunches}
-            setFormValueToLunchValues={index => this.setFormValueToLunchValues(index)}
-          />
+        <Col md={8}>
+          <LunchCalendar lunches={this.state.lunches} />
         </Col>
       </Fragment>
     );
