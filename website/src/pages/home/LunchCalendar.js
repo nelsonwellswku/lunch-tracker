@@ -10,6 +10,7 @@ const LunchCalendar = (props) => {
     const [year, month, day] = lunch.lunchDate.split('-');
     const lunchDate = new Date(year, month - 1, day);
     return {
+      lunchId: lunch.lunchId,
       title: lunch.location,
       start: lunchDate,
       end: lunchDate,
@@ -23,6 +24,8 @@ const LunchCalendar = (props) => {
     defaultView="month"
     events={events}
     style={{ height: '100vh' }}
+    views={{ month: true }}
+    {...props}
   />);
 };
 

@@ -9,7 +9,6 @@ import RegistrationVerificationPage from './pages/registration-verification/Regi
 import LogInPage from './pages/log-in/LogInPage';
 import LogOutPage from './pages/log-out/LogOutPage';
 import MainNav from './components/MainNav';
-import LunchCalendar from './pages/home/LunchCalendar';
 
 class App extends Component {
   constructor() {
@@ -129,7 +128,6 @@ class App extends Component {
               path="/authentication/register/verify/:verificationToken"
               render={routeProps => this.registrationVerificationPage(routeProps)}
             />
-            <Route exact path="/calendar" component={LunchCalendar} />
           </Grid>
         </Router>
       </div>

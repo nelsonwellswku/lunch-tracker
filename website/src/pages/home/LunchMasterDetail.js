@@ -14,6 +14,7 @@ class LunchMasterDetail extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.createLunch = this.createLunch.bind(this);
     this.updateLunch = this.updateLunch.bind(this);
+    this.handleSelectEvent = this.handleSelectEvent.bind(this);
 
     this.state = {
       form: {
@@ -165,6 +166,11 @@ class LunchMasterDetail extends Component {
     }
   }
 
+  handleSelectEvent(selectEvent) {
+    const lunchIndex = this.state.lunches.findIndex(lunch => selectEvent.lunchId === lunch.lunchId);
+    this.setFormValueToLunchValues(lunchIndex);
+  }
+
   render() {
     const {
       addFetch,
@@ -190,7 +196,10 @@ class LunchMasterDetail extends Component {
           />
         </Col>
         <Col md={8}>
-          <LunchCalendar lunches={this.state.lunches} />
+          <LunchCalendar
+            lunches={this.state.lunches}
+            onSelectEvent={this.handleSelectEvent}
+          />
         </Col>
       </Fragment>
     );

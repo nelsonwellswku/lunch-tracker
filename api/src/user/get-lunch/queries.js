@@ -9,7 +9,6 @@ const getLunches = async ({
 }) => {
   const queryBuilder = db.queryBuilder()
     .from('Lunch')
-    .limit(10)
     .where('AppUserId', appUserId);
 
   if (date) {
