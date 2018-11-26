@@ -21,7 +21,7 @@ router.get(
     },
   }),
   authorize,
-  handlers.getLunch,
+  handlers.getLunches,
 );
 
 router.post(
