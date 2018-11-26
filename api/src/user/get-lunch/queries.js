@@ -16,7 +16,7 @@ const getLunches = async ({
   }
 
   if (startDate && endDate) {
-    queryBuilder.whereBetween('LunchDate', startDate, endDate);
+    queryBuilder.whereBetween('LunchDate', [startDate, endDate]);
   }
 
   const lunches = await queryBuilder

@@ -11,7 +11,7 @@ const LunchCalendar = (props) => {
     const lunchDate = new Date(year, month - 1, day);
     return {
       lunchId: lunch.lunchId,
-      title: lunch.location,
+      title: `$${lunch.cost} - ${lunch.location}`,
       start: lunchDate,
       end: lunchDate,
       allDay: true,

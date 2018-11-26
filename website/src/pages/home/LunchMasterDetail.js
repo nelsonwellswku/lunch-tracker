@@ -40,12 +40,14 @@ class LunchMasterDetail extends Component {
 
     if (user) {
       const fetchName = 'currentLunch';
+      const startDate = moment().startOf('month').format('YYYY-MM-DD');
+      const endDate = moment().endOf('month').format('YYYY-MM-DD');
 
       const results = await createFetcher({
         onUnauthorized: logOut,
         onPrefetch: () => addFetch(fetchName),
         onPostfetch: () => removeFetch(fetchName),
-      }).get(`/api/user/${user.appUserId}/lunch`);
+      }).get(`/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`);
 
       if (results && results.data) {
         const currentLunch = results.data.find(x => x.lunchDate === now) || {};
