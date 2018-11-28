@@ -9,6 +9,7 @@ import RegistrationVerificationPage from './pages/registration-verification/Regi
 import LogInPage from './pages/log-in/LogInPage';
 import LogOutPage from './pages/log-out/LogOutPage';
 import MainNav from './components/MainNav';
+import AppContext from './AppContext';
 
 class App extends Component {
   constructor() {
@@ -22,7 +23,6 @@ class App extends Component {
     this.logInPage = this.logInPage.bind(this);
     this.logOutPage = this.logOutPage.bind(this);
     this.registrationPage = this.registrationPage.bind(this);
-    this.registrationVerificationPage = this.registrationVerificationPage.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
     this.addFetch = this.addFetch.bind(this);
@@ -75,11 +75,7 @@ class App extends Component {
   }
 
   logInPage() {
-    return (<LogInPage
-      logIn={this.logIn}
-      addFetch={this.addFetch}
-      removeFetch={this.removeFetch}
-    />);
+    return (<LogInPage logIn={this.logIn} />);
   }
 
   logOutPage() {
@@ -87,12 +83,7 @@ class App extends Component {
   }
 
   homePage() {
-    return (<HomePage
-      user={this.state.user}
-      addFetch={this.addFetch}
-      removeFetch={this.removeFetch}
-      logOut={this.logOut}
-    />);
+    return (<HomePage user={this.state.user} />);
   }
 
   registrationPage() {
@@ -104,33 +95,33 @@ class App extends Component {
     );
   }
 
-  registrationVerificationPage(routeProps) {
-    return (
-      <RegistrationVerificationPage
-        addFetch={this.addFetch}
-        removeFetch={this.removeFetch}
-        {...routeProps}
-      />);
-  }
-
   render() {
-    return (
-      <div>
-        <MainNav user={this.state.user} fetching={this.state.fetching} />
+    const context = {
+      onPrefetch: this.addFetch,
+      onPostfetch: this.removeFetch,
+      onUnauthorized: this.logOut,
+      user: this.state.user,
+    };
 
-        <Router>
-          <Grid>
-            <Route exact path="/" render={this.homePage} />
-            <Route exact path="/authentication/login" render={this.logInPage} />
-            <Route exact path="/authentication/logout" render={this.logOutPage} />
-            <Route exact path="/authentication/register" render={this.registrationPage} />
-            <Route
-              path="/authentication/register/verify/:verificationToken"
-              render={routeProps => this.registrationVerificationPage(routeProps)}
-            />
-          </Grid>
-        </Router>
-      </div>
+    return (
+      <AppContext.Provider value={context}>
+        <div>
+          <MainNav user={this.state.user} fetching={this.state.fetching} />
+
+          <Router>
+            <Grid>
+              <Route exact path="/" render={this.homePage} />
+              <Route exact path="/authentication/login" render={this.logInPage} />
+              <Route exact path="/authentication/logout" render={this.logOutPage} />
+              <Route exact path="/authentication/register" render={this.registrationPage} />
+              <Route
+                path="/authentication/register/verify/:verificationToken"
+                render={routeProps => <RegistrationVerificationPage {...routeProps} />}
+              />
+            </Grid>
+          </Router>
+        </div>
+      </AppContext.Provider>
     );
   }
 }

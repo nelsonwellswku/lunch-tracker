@@ -6,7 +6,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 const localizer = Calendar.momentLocalizer(moment);
 
 const LunchCalendar = (props) => {
-  const events = props.lunches.map((lunch) => {
+  const events = props.lunches.filter(x => x).map((lunch) => {
     const [year, month, day] = lunch.lunchDate.split('-');
     const lunchDate = new Date(year, month - 1, day);
     return {

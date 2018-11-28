@@ -3,6 +3,7 @@ import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstr
 import Redirect from 'react-router-dom/Redirect';
 import { createFetcher } from '../../api/fetchFactory';
 import ValidationMessages from '../../components/ValidationMessages';
+import AppContext from '../../AppContext';
 
 class LogInPage extends Component {
   constructor(props) {
@@ -28,16 +29,16 @@ class LogInPage extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
-    const { addFetch, removeFetch } = this.props;
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
     };
     const fetchName = 'loginForm';
+    const { onPrefetch, onPostfetch } = this.context;
     try {
-      const logInResult = await createFetcher({
-        onPrefetch: () => addFetch(fetchName),
-        onPostfetch: () => removeFetch(fetchName),
+      const logInResult = await createFetcher(fetchName, {
+        onPrefetch,
+        onPostfetch,
       }).post('/api/authentication/login', postBody);
       this.logIn(logInResult.data.token);
       this.setState({
@@ -88,5 +89,7 @@ class LogInPage extends Component {
       </Col>);
   }
 }
+
+LogInPage.contextType = AppContext;
 
 export default LogInPage;

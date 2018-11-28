@@ -5,19 +5,11 @@ import LunchMasterDetail from './LunchMasterDetail';
 const HomePage = (props) => {
   const {
     user,
-    addFetch,
-    removeFetch,
-    logOut,
   } = props;
 
   const isLoggedIn = !!user;
   const promptForUserAction = isLoggedIn ?
-    (<LunchMasterDetail
-      addFetch={addFetch}
-      removeFetch={removeFetch}
-      user={user}
-      logOut={logOut}
-    />) :
+    (<LunchMasterDetail />) :
     <RegistrationCallToAction />;
 
   return (

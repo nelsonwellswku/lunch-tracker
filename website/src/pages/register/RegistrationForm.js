@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
 import ValidationMessages from '../../components/ValidationMessages';
+import AppContext from '../../AppContext';
 
 class RegistrationForm extends Component {
   constructor() {
@@ -27,18 +28,18 @@ class RegistrationForm extends Component {
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
 
-    const { addFetch, removeFetch } = this.props;
-
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
       passwordConfirmation: this.state.passwordConfirmation,
     };
+
     const fetchName = 'registrationForm';
+    const { onPrefetch, onPostfetch } = this.context;
     try {
-      await createFetcher({
-        onPrefetch: () => addFetch(fetchName),
-        onPostfetch: () => removeFetch(fetchName),
+      await createFetcher(fetchName, {
+        onPrefetch,
+        onPostfetch,
       }).post('/api/authentication/registerUser', postBody);
       this.setState({
         validationErrors: [],
@@ -94,5 +95,7 @@ class RegistrationForm extends Component {
       </Col>);
   }
 }
+
+RegistrationForm.contextType = AppContext;
 
 export default RegistrationForm;
