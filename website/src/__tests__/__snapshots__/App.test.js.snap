@@ -1,42 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`app component renders without crashing 1`] = `
-<div>
-  <MainNav
-    fetching={Object {}}
-    user={null}
-  />
-  <BrowserRouter>
-    <Grid
-      bsClass="container"
-      componentClass="div"
-      fluid={false}
-    >
-      <Route
-        exact={true}
-        path="/"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/authentication/login"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/authentication/logout"
-        render={[Function]}
-      />
-      <Route
-        exact={true}
-        path="/authentication/register"
-        render={[Function]}
-      />
-      <Route
-        path="/authentication/register/verify/:verificationToken"
-        render={[Function]}
-      />
-    </Grid>
-  </BrowserRouter>
-</div>
+<ContextProvider
+  value={
+    Object {
+      "onPostfetch": [Function],
+      "onPrefetch": [Function],
+      "onUnauthorized": [Function],
+      "user": null,
+    }
+  }
+>
+  <div>
+    <MainNav
+      fetching={Object {}}
+      user={null}
+    />
+    <BrowserRouter>
+      <Grid
+        bsClass="container"
+        componentClass="div"
+        fluid={false}
+      >
+        <Route
+          exact={true}
+          path="/"
+          render={[Function]}
+        />
+        <Route
+          exact={true}
+          path="/authentication/login"
+          render={[Function]}
+        />
+        <Route
+          exact={true}
+          path="/authentication/logout"
+          render={[Function]}
+        />
+        <Route
+          exact={true}
+          path="/authentication/register"
+          render={[Function]}
+        />
+        <Route
+          path="/authentication/register/verify/:verificationToken"
+          render={[Function]}
+        />
+      </Grid>
+    </BrowserRouter>
+  </div>
+</ContextProvider>
 `;
