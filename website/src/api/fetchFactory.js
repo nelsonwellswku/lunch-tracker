@@ -9,7 +9,7 @@ export const createFetcher = (name, {
 
   const authToken = localStorage.getItem('authToken');
   if (authToken) {
-    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+    fetch.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
   fetch.interceptors.request.use((config) => {
