@@ -4,6 +4,7 @@ import { Col } from 'react-bootstrap';
 import { createFetcher } from '../../api/fetchFactory';
 import LunchForm from './LunchForm';
 import LunchCalendar from './LunchCalendar';
+import AppContext from '../../AppContext';
 
 class LunchMasterDetail extends Component {
   constructor() {
@@ -32,29 +33,23 @@ class LunchMasterDetail extends Component {
   async componentDidMount() {
     const now = moment().format('YYYY-MM-DD');
     const {
-      addFetch,
-      removeFetch,
       user,
-      logOut,
-    } = this.props;
+    } = this.context;
 
     if (user) {
       const fetchName = 'currentLunch';
       const startDate = moment().startOf('month').format('YYYY-MM-DD');
       const endDate = moment().endOf('month').format('YYYY-MM-DD');
 
-      const results = await createFetcher({
-        onUnauthorized: logOut,
-        onPrefetch: () => addFetch(fetchName),
-        onPostfetch: () => removeFetch(fetchName),
-      }).get(`/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`);
+      const results = await createFetcher(fetchName, this.context)
+        .get(`/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`);
 
       if (results && results.data) {
         const currentLunch = results.data.find(x => x.lunchDate === now) || {};
 
         const newState = {
           currentLunchId: currentLunch.lunchId || '',
-          lunches: currentLunch.lunchId ? results.data : [null, ...results.data],
+          lunches: currentLunch.lunchId ? results.data : [...results.data],
           form: {
             ...this.state.form,
             ...currentLunch,
@@ -116,31 +111,21 @@ class LunchMasterDetail extends Component {
     const { currentLunchId: lunchId } = this.state;
     const {
       user: { appUserId },
-      logout,
-      addFetch,
-      removeFetch,
-    } = this.props;
+    } = this.context;
+
     const fetchName = 'updateLunch';
-    return createFetcher({
-      onUnauthorized: logout,
-      onPrefetch: () => addFetch(fetchName),
-      onPostfetch: () => removeFetch(fetchName),
-    }).put(`api/user/${appUserId}/lunch/${lunchId}`, values);
+    return createFetcher(fetchName, this.context)
+      .put(`api/user/${appUserId}/lunch/${lunchId}`, values);
   }
 
   createLunch(values) {
     const {
       user: { appUserId },
-      logout,
-      addFetch,
-      removeFetch,
-    } = this.props;
+    } = this.context;
+
     const fetchName = 'createLunch';
-    return createFetcher({
-      onUnauthorized: logout,
-      onPrefetch: () => addFetch(fetchName),
-      onPostfetch: () => removeFetch(fetchName),
-    }).post(`/api/user/${appUserId}/lunch`, values);
+    return createFetcher(fetchName, this.context)
+      .post(`/api/user/${appUserId}/lunch`, values);
   }
 
   async handleSubmit(submitEvent) {
@@ -174,13 +159,6 @@ class LunchMasterDetail extends Component {
   }
 
   render() {
-    const {
-      addFetch,
-      removeFetch,
-      user,
-      logOut,
-    } = this.props;
-
     return (
       <Fragment>
         <Col md={4}>
@@ -191,10 +169,6 @@ class LunchMasterDetail extends Component {
             handleButtonChange={this.handleButtonChange}
             handleSubmit={this.handleSubmit}
             form={this.state.form}
-            addFetch={addFetch}
-            removeFetch={removeFetch}
-            user={user}
-            logOut={logOut}
           />
         </Col>
         <Col md={8}>
@@ -207,5 +181,7 @@ class LunchMasterDetail extends Component {
     );
   }
 }
+
+LunchMasterDetail.contextType = AppContext;
 
 export default LunchMasterDetail;

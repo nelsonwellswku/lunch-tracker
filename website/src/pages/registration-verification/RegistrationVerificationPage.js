@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { createFetcher } from '../../api/fetchFactory';
+import AppContext from '../../AppContext';
 
 class RegistrationVerificationPage extends Component {
   constructor() {
@@ -13,16 +14,18 @@ class RegistrationVerificationPage extends Component {
 
   async componentWillMount() {
     const {
-      addFetch,
-      removeFetch,
       match: { params: { verificationToken } },
     } = this.props;
 
     const fetchName = 'registrationVerification';
+    const { onPrefetch, onPostfetch } = this.context;
     try {
-      await createFetcher({
-        onPrefetch: () => addFetch(fetchName),
-        onPostfetch: () => { removeFetch(fetchName); this.setState({ fetchingComplete: true }); },
+      await createFetcher(fetchName, {
+        onPrefetch,
+        onPostfetch: () => {
+          onPostfetch(fetchName);
+          this.setState({ fetchingComplete: true });
+        },
       }).post('/api/authentication/verifyRegistrationToken', { verificationToken });
 
       this.setState({ isSuccessful: true });
@@ -42,5 +45,7 @@ class RegistrationVerificationPage extends Component {
     return null;
   }
 }
+
+RegistrationVerificationPage.contextType = AppContext;
 
 export default RegistrationVerificationPage;

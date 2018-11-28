@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const createFetcher = ({
+export const createFetcher = (name, {
   onUnauthorized = () => undefined,
   onPrefetch = () => undefined,
   onPostfetch = () => undefined,
@@ -13,12 +13,12 @@ export const createFetcher = ({
   }
 
   fetch.interceptors.request.use((config) => {
-    onPrefetch();
+    onPrefetch(name);
     return config;
   }, error => Promise.reject(error));
 
   fetch.interceptors.response.use((response) => {
-    onPostfetch();
+    onPostfetch(name);
     return response;
   }, (error) => {
     if (error.response.status === 401) {
