@@ -16,6 +16,7 @@ class LunchMasterDetail extends Component {
     this.createLunch = this.createLunch.bind(this);
     this.updateLunch = this.updateLunch.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
+    this.handleSelectSlot = this.handleSelectSlot.bind(this);
 
     this.state = {
       form: {
@@ -158,11 +159,33 @@ class LunchMasterDetail extends Component {
     this.setFormValueToLunchValues(lunchIndex);
   }
 
+  handleSelectSlot(selectSlot) {
+    const { start: selectedDate } = selectSlot;
+    const formattedSelectedDate = moment(selectedDate).format('YYYY-MM-DD');
+    const lunchIndex =
+      this.state.lunches.findIndex(lunch => formattedSelectedDate === lunch.lunchDate);
+
+    if (lunchIndex > -1) {
+      this.setFormValueToLunchValues(lunchIndex);
+    } else {
+      this.setState({
+        form: {
+          location: '',
+          cost: '',
+          revisit: 'unsure',
+          lunchDate: formattedSelectedDate,
+        },
+        currentLunchId: null,
+      });
+    }
+  }
+
   render() {
     return (
       <Fragment>
         <Col md={4}>
           <h1>Lunch Log</h1>
+          <p><strong>{this.state.form.lunchDate}</strong></p>
           <LunchForm
             validationErrors={this.state.validationErrors}
             handleTextChange={this.handleTextChange}
@@ -175,6 +198,7 @@ class LunchMasterDetail extends Component {
           <LunchCalendar
             lunches={this.state.lunches}
             onSelectEvent={this.handleSelectEvent}
+            onSelectSlot={this.handleSelectSlot}
           />
         </Col>
       </Fragment>
