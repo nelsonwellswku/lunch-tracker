@@ -6,6 +6,8 @@ import LunchForm from './LunchForm';
 import LunchCalendar from './LunchCalendar';
 import AppContext from '../../AppContext';
 
+const dateFormat = 'YYYY-MM-DD';
+
 class LunchMasterDetail extends Component {
   constructor() {
     super();
@@ -24,7 +26,7 @@ class LunchMasterDetail extends Component {
         location: '',
         cost: '',
         revisit: 'unsure',
-        lunchDate: moment().format('YYYY-MM-DD'),
+        lunchDate: moment().format(dateFormat),
       },
       lunches: [],
       currentLunchId: null,
@@ -33,15 +35,15 @@ class LunchMasterDetail extends Component {
   }
 
   async componentDidMount() {
-    const now = moment().format('YYYY-MM-DD');
+    const now = moment().format(dateFormat);
     const {
       user,
     } = this.context;
 
     if (user) {
       const fetchName = 'currentLunch';
-      const startDate = moment().startOf('month').format('YYYY-MM-DD');
-      const endDate = moment().endOf('month').format('YYYY-MM-DD');
+      const startDate = moment().startOf('month').format(dateFormat);
+      const endDate = moment().endOf('month').format(dateFormat);
 
       const url = `/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`;
       const results = await get(url, fetchName, this.context);
@@ -71,7 +73,7 @@ class LunchMasterDetail extends Component {
           location: '',
           cost: '',
           revisit: 'unsure',
-          lunchDate: moment().format('YYYY-MM-DD'),
+          lunchDate: moment().format(dateFormat),
         },
         currentLunchId: null,
       });
@@ -89,7 +91,7 @@ class LunchMasterDetail extends Component {
   }
 
   dayPropGetter(date) {
-    if (moment(date).format('YYYY-MM-DD') === this.state.form.lunchDate) {
+    if (moment(date).format(dateFormat) === this.state.form.lunchDate) {
       return {
         style: {
           background: 'wheat',
@@ -132,7 +134,7 @@ class LunchMasterDetail extends Component {
 
   handleSelectSlot(selectSlot) {
     const { start: selectedDate } = selectSlot;
-    const formattedSelectedDate = moment(selectedDate).format('YYYY-MM-DD');
+    const formattedSelectedDate = moment(selectedDate).format(dateFormat);
     const lunchIndex =
       this.state.lunches.findIndex(lunch => formattedSelectedDate === lunch.lunchDate);
 
