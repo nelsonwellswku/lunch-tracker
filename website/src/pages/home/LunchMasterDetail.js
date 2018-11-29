@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Col } from 'react-bootstrap';
-import { createFetcher } from '../../api/fetchFactory';
+import { get, post, put } from '../../api';
 import LunchForm from './LunchForm';
 import LunchCalendar from './LunchCalendar';
 import AppContext from '../../AppContext';
@@ -41,8 +41,8 @@ class LunchMasterDetail extends Component {
       const startDate = moment().startOf('month').format('YYYY-MM-DD');
       const endDate = moment().endOf('month').format('YYYY-MM-DD');
 
-      const results = await createFetcher(fetchName, this.context)
-        .get(`/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`);
+      const url = `/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`;
+      const results = await get(url, fetchName, this.context);
 
       if (results && results.data) {
         const currentLunch = results.data.find(x => x.lunchDate === now) || {};
@@ -114,8 +114,8 @@ class LunchMasterDetail extends Component {
     } = this.context;
 
     const fetchName = 'updateLunch';
-    return createFetcher(fetchName, this.context)
-      .put(`api/user/${appUserId}/lunch/${lunchId}`, values);
+    const url = `api/user/${appUserId}/lunch/${lunchId}`;
+    return put(url, values, fetchName, this.context);
   }
 
   createLunch(values) {
@@ -124,8 +124,8 @@ class LunchMasterDetail extends Component {
     } = this.context;
 
     const fetchName = 'createLunch';
-    return createFetcher(fetchName, this.context)
-      .post(`/api/user/${appUserId}/lunch`, values);
+    const url = `/api/user/${appUserId}/lunch`;
+    return post(url, values, fetchName, this.context);
   }
 
   async handleSubmit(submitEvent) {

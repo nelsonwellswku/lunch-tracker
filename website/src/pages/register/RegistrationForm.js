@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
-import { createFetcher } from '../../api/fetchFactory';
+import { post } from '../../api';
 import ValidationMessages from '../../components/ValidationMessages';
 import AppContext from '../../AppContext';
 
@@ -35,12 +35,8 @@ class RegistrationForm extends Component {
     };
 
     const fetchName = 'registrationForm';
-    const { onPrefetch, onPostfetch } = this.context;
     try {
-      await createFetcher(fetchName, {
-        onPrefetch,
-        onPostfetch,
-      }).post('/api/authentication/registerUser', postBody);
+      await post('/api/authentication/registerUser', postBody, fetchName, this.context);
       this.setState({
         validationErrors: [],
       });

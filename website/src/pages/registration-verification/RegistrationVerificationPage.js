@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createFetcher } from '../../api/fetchFactory';
+import { post } from '../../api';
 import AppContext from '../../AppContext';
 
 class RegistrationVerificationPage extends Component {
@@ -18,19 +18,12 @@ class RegistrationVerificationPage extends Component {
     } = this.props;
 
     const fetchName = 'registrationVerification';
-    const { onPrefetch, onPostfetch } = this.context;
     try {
-      await createFetcher(fetchName, {
-        onPrefetch,
-        onPostfetch: () => {
-          onPostfetch(fetchName);
-          this.setState({ fetchingComplete: true });
-        },
-      }).post('/api/authentication/verifyRegistrationToken', { verificationToken });
-
-      this.setState({ isSuccessful: true });
+      const url = '/api/authentication/verifyRegistrationToken';
+      await post(url, { verificationToken }, fetchName, this.context);
+      this.setState({ isSuccessful: true, fetchingComplete: true });
     } catch (err) {
-      this.setState({ isSuccessful: false });
+      this.setState({ isSuccessful: false, fetchingComplete: true });
     }
   }
 
