@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
 import Redirect from 'react-router-dom/Redirect';
-import { createFetcher } from '../../api/fetchFactory';
+import { post } from '../../api';
 import ValidationMessages from '../../components/ValidationMessages';
 import AppContext from '../../AppContext';
 
@@ -34,12 +34,13 @@ class LogInPage extends Component {
       password: this.state.password,
     };
     const fetchName = 'loginForm';
-    const { onPrefetch, onPostfetch } = this.context;
     try {
-      const logInResult = await createFetcher(fetchName, {
-        onPrefetch,
-        onPostfetch,
-      }).post('/api/authentication/login', postBody);
+      const logInResult = await post(
+        '/api/authentication/login',
+        postBody,
+        fetchName,
+        this.context,
+      );
       this.logIn(logInResult.data.token);
       this.setState({
         isLoggedIn: true,
