@@ -17,6 +17,7 @@ class LunchMasterDetail extends Component {
     this.updateLunch = this.updateLunch.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
+    this.dayPropGetter = this.dayPropGetter.bind(this);
 
     this.state = {
       form: {
@@ -87,46 +88,16 @@ class LunchMasterDetail extends Component {
     }
   }
 
-  handleTextChange(changeEvent) {
-    const { target } = changeEvent;
-    const { name, value } = target;
+  dayPropGetter(date) {
+    if (moment(date).format('YYYY-MM-DD') === this.state.form.lunchDate) {
+      return {
+        style: {
+          background: 'wheat',
+        },
+      };
+    }
 
-    this.setState({
-      form: {
-        ...this.state.form,
-        [name]: value,
-      },
-    });
-  }
-
-  handleButtonChange(changeEvent) {
-    this.setState({
-      form: {
-        ...this.state.form,
-        revisit: changeEvent,
-      },
-    });
-  }
-
-  updateLunch(values) {
-    const { currentLunchId: lunchId } = this.state;
-    const {
-      user: { appUserId },
-    } = this.context;
-
-    const fetchName = 'updateLunch';
-    const url = `api/user/${appUserId}/lunch/${lunchId}`;
-    return put(url, values, fetchName, this.context);
-  }
-
-  createLunch(values) {
-    const {
-      user: { appUserId },
-    } = this.context;
-
-    const fetchName = 'createLunch';
-    const url = `/api/user/${appUserId}/lunch`;
-    return post(url, values, fetchName, this.context);
+    return {};
   }
 
   async handleSubmit(submitEvent) {
@@ -180,6 +151,48 @@ class LunchMasterDetail extends Component {
     }
   }
 
+  updateLunch(values) {
+    const { currentLunchId: lunchId } = this.state;
+    const {
+      user: { appUserId },
+    } = this.context;
+
+    const fetchName = 'updateLunch';
+    const url = `api/user/${appUserId}/lunch/${lunchId}`;
+    return put(url, values, fetchName, this.context);
+  }
+
+  createLunch(values) {
+    const {
+      user: { appUserId },
+    } = this.context;
+
+    const fetchName = 'createLunch';
+    const url = `/api/user/${appUserId}/lunch`;
+    return post(url, values, fetchName, this.context);
+  }
+
+  handleButtonChange(changeEvent) {
+    this.setState({
+      form: {
+        ...this.state.form,
+        revisit: changeEvent,
+      },
+    });
+  }
+
+  handleTextChange(changeEvent) {
+    const { target } = changeEvent;
+    const { name, value } = target;
+
+    this.setState({
+      form: {
+        ...this.state.form,
+        [name]: value,
+      },
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -199,6 +212,7 @@ class LunchMasterDetail extends Component {
             lunches={this.state.lunches}
             onSelectEvent={this.handleSelectEvent}
             onSelectSlot={this.handleSelectSlot}
+            dayPropGetter={this.dayPropGetter}
           />
         </Col>
       </Fragment>
