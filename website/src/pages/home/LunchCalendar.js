@@ -25,6 +25,7 @@ const LunchCalendar = (props) => {
     events={events}
     style={{ height: '100vh' }}
     views={{ month: true }}
+    selectable
     {...props}
   />);
 };
