@@ -1,17 +1,37 @@
 const db = require('../../infrastructure/database');
+const { revisit } = require('../lookups');
 
-const updateLunch = async (lunch) => {
+const updateLunch = async (trx, lunch) => {
+  let restaurantId = await db.queryBuilder()
+    .from('restaurant')
+    .where('restaurantName', lunch.location)
+    .select('restaurantId')
+    .first()
+    .transacting(trx);
+
+  if (!restaurantId) {
+    [restaurantId] = await db.queryBuilder()
+      .insert({
+        restaurantName: lunch.location,
+        verified: false,
+      })
+      .into('restaurant')
+      .returning('restaurantId')
+      .transacting(trx);
+  }
+
   const [lunchId] = await db.queryBuilder()
-    .into('Lunch')
-    .where('LunchId', lunch.lunchId)
+    .into('lunch')
+    .where('lunchId', lunch.lunchId)
     .update({
-      AppUserId: lunch.appUserId,
-      Location: lunch.location,
-      Cost: lunch.cost,
-      Revisit: lunch.revisit,
-      LunchDate: lunch.date,
+      appUserId: lunch.appUserId,
+      restaurantId,
+      cost: lunch.cost,
+      revisitId: revisit[lunch.revisit],
+      lunchDate: lunch.date,
     })
-    .returning('LunchId');
+    .returning('LunchId')
+    .transacting(trx);
 
   return lunchId;
 };
