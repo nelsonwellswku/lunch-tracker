@@ -12,9 +12,9 @@ create table Revisit
 insert into Revisit
   (RevisitId, RevisitName)
 values
-  (0, 'Unsure'),
-  (1, 'Yes'),
-  (2, 'No');
+  (0, 'unsure'),
+  (1, 'yes'),
+  (2, 'no');
 
 commit transaction;
 set xact_abort off;

@@ -1,58 +1,40 @@
-const moment = require('moment');
 const db = require('../../infrastructure/database');
+const { revisit } = require('../lookups');
 
-const createLunch = async (lunch) => {
+const createLunch = async (trx, lunch) => {
+  let restaurantId = await db.queryBuilder()
+    .from('restaurant')
+    .where('restaurantName', lunch.location)
+    .select('restaurantId')
+    .first()
+    .transacting(trx);
+
+  if (!restaurantId) {
+    [restaurantId] = await db.queryBuilder()
+      .insert({
+        restaurantName: lunch.location,
+        verified: false,
+      })
+      .into('restaurant')
+      .returning('restaurantId')
+      .transacting(trx);
+  }
+
   const [lunchId] = await db.queryBuilder()
     .insert({
       AppUserId: lunch.appUserId,
-      Location: lunch.location,
+      restaurantId,
       Cost: lunch.cost,
-      Revisit: lunch.revisit,
+      RevisitId: revisit[lunch.revisit],
       LunchDate: lunch.lunchDate,
     })
-    .into('Lunch')
-    .returning('LunchId');
+    .into('lunch')
+    .returning('lunchId')
+    .transacting(trx);
 
   return lunchId;
-};
-
-const updateLunch = async (lunch) => {
-  const [lunchId] = await db.queryBuilder()
-    .into('Lunch')
-    .where('LunchId', lunch.lunchId)
-    .update({
-      AppUserId: lunch.appUserId,
-      Location: lunch.location,
-      Cost: lunch.cost,
-      Revisit: lunch.revisit,
-      LunchDate: lunch.lunchDate,
-    })
-    .returning('LunchId');
-
-  return lunchId;
-};
-
-const getLunchId = async ({ appUserId, date }) => {
-  const startOfDay = moment.utc(date).startOf('day').format();
-  const endOfDay = moment.utc(date).endOf('day').format();
-
-  const lunch = await db.queryBuilder()
-    .from('Lunch')
-    .where('AppUserId', appUserId)
-    .whereBetween('LunchDate', [startOfDay, endOfDay])
-    .first('LunchId');
-
-  if (lunch) {
-    return {
-      lunchId: lunch.LunchId,
-    };
-  }
-
-  return null;
 };
 
 module.exports = {
   createLunch,
-  updateLunch,
-  getLunchId,
 };

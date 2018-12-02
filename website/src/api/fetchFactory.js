@@ -24,7 +24,7 @@ export const createFetcher = (name, {
     if (error.response.status === 401) {
       onUnauthorized();
     }
-    onPostfetch();
+    onPostfetch(name);
     return Promise.reject(error);
   });
 

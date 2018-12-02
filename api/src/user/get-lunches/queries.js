@@ -1,5 +1,4 @@
 const db = require('../../infrastructure/database');
-const { camelCaseKeys } = require('../../infrastructure/type-fns/object');
 
 const getLunches = async ({
   appUserId,
@@ -8,23 +7,25 @@ const getLunches = async ({
   endDate,
 }) => {
   const queryBuilder = db.queryBuilder()
-    .from('Lunch')
-    .limit(31)
-    .where('AppUserId', appUserId);
+    .from('Lunch as l')
+    .join('revisit as r', 'r.revisitId', 'l.revisitId')
+    .join('restaurant as re', 're.restaurantId', 'l.restaurantId')
+    .where('appUserId', appUserId)
+    .limit(31);
 
   if (date) {
-    queryBuilder.where('LunchDate', date);
+    queryBuilder.where('l.lunchDate', date);
   }
 
   if (startDate && endDate) {
-    queryBuilder.whereBetween('LunchDate', [startDate, endDate]);
+    queryBuilder.whereBetween('l.lunchDate', [startDate, endDate]);
   }
 
   const lunches = await queryBuilder
-    .orderBy('LunchDate', 'desc')
-    .select('LunchId', 'Location', 'Cost', 'Revisit', 'LunchDate');
+    .orderBy('l.lunchDate', 'desc')
+    .select('l.lunchId', 're.restaurantName as location', 'l.cost', 'r.revisitName as revisit', 'l.lunchDate');
 
-  return lunches.map(camelCaseKeys);
+  return lunches;
 };
 
 module.exports = {

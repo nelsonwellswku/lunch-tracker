@@ -8,7 +8,8 @@ create table Restaurant
   Verified bit not null default(0),
   CreatedAt datetime2 not null default(getutcdate()),
 
-  constraint [PK_Restaurant] primary key clustered (RestaurantId asc)
+  constraint [PK_Restaurant] primary key clustered (RestaurantId asc),
+  constraint [UX_Restaurant_RestaurantId] unique (RestaurantName)
 );
 
 insert into Restaurant
