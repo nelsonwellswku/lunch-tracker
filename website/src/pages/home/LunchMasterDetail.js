@@ -40,28 +40,26 @@ class LunchMasterDetail extends Component {
       user,
     } = this.context;
 
-    if (user) {
-      const fetchName = 'currentLunch';
-      const startDate = moment().startOf('month').format(dateFormat);
-      const endDate = moment().endOf('month').format(dateFormat);
+    const fetchName = 'currentLunch';
+    const startDate = moment().startOf('month').format(dateFormat);
+    const endDate = moment().endOf('month').format(dateFormat);
 
-      const url = `/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`;
-      const results = await get(url, fetchName, this.context);
+    const url = `/api/user/${user.appUserId}/lunch?startDate=${startDate}&endDate=${endDate}`;
+    const results = await get(url, fetchName, this.context);
 
-      if (results && results.data) {
-        const currentLunch = results.data.find(x => x.lunchDate === now) || {};
+    if (results && results.data) {
+      const currentLunch = results.data.find(x => x.lunchDate === now) || {};
 
-        const newState = {
-          currentLunchId: currentLunch.lunchId || '',
-          lunches: currentLunch.lunchId ? results.data : [...results.data],
-          form: {
-            ...this.state.form,
-            ...currentLunch,
-          },
-        };
+      const newState = {
+        currentLunchId: currentLunch.lunchId || '',
+        lunches: currentLunch.lunchId ? results.data : [...results.data],
+        form: {
+          ...this.state.form,
+          ...currentLunch,
+        },
+      };
 
-        this.setState(newState);
-      }
+      this.setState(newState);
     }
   }
 

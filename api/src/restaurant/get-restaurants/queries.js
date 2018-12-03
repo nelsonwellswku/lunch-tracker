@@ -4,7 +4,7 @@ const getRestaurants = async ({
   restaurantName,
   verified = null,
 }) => {
-  const queryBuilder = db.queryBuilder
+  const queryBuilder = db.queryBuilder()
     .from('restaurant')
     .limit(50);
 

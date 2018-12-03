@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(passport.authenticate('jwt', { session: false }));
 
 router.get(
-  '/restaurant',
+  '/',
   celebrate({
     query: {
       restaurantName: Joi.string(),
