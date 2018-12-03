@@ -1,25 +1,9 @@
 const db = require('../../infrastructure/database');
+const sharedQueries = require('../shared-queries');
 const { revisit } = require('../lookups');
 
 const updateLunch = async (trx, lunch) => {
-  let restaurantId = await db.queryBuilder()
-    .from('restaurant')
-    .where('restaurantName', lunch.location)
-    .select('restaurantId')
-    .first()
-    .transacting(trx);
-
-  if (!restaurantId) {
-    [restaurantId] = await db.queryBuilder()
-      .insert({
-        restaurantName: lunch.location,
-        verified: false,
-      })
-      .into('restaurant')
-      .returning('restaurantId')
-      .transacting(trx);
-  }
-
+  const restaurantId = await sharedQueries.createOrGetRestaurantId(trx, lunch);
   const [lunchId] = await db.queryBuilder()
     .into('lunch')
     .where('lunchId', lunch.lunchId)
@@ -28,7 +12,6 @@ const updateLunch = async (trx, lunch) => {
       restaurantId,
       cost: lunch.cost,
       revisitId: revisit[lunch.revisit],
-      lunchDate: lunch.date,
     })
     .returning('LunchId')
     .transacting(trx);
