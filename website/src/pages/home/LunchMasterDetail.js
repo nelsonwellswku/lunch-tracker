@@ -188,7 +188,7 @@ class LunchMasterDetail extends Component {
     this.setState({
       form: {
         ...this.state.form,
-        [name]: value,
+        [name]: value ? (value.location || value) : value,
       },
     });
   }

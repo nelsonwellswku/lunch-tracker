@@ -64,7 +64,6 @@ class LunchForm extends Component {
 
   render() {
     const { location, cost, revisit } = this.props.form;
-    console.log('------', location);
     const { handleTextChange, handleButtonChange, handleSubmit } = this.props;
 
     return (
@@ -79,8 +78,8 @@ class LunchForm extends Component {
               minLength={3}
               onSearch={this.handleSearch}
               onChange={this.handleTextChange}
-              onInputChange={this.handleTextChange}
-              selected={[location]}
+              allowNew
+              selected={location ? [location] : []}
               name="location"
             />
           </FormGroup>
