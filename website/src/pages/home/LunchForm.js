@@ -20,6 +20,7 @@ class LunchForm extends Component {
 
     this.handleSearch = this.handleSearch.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
 
     this.state = {
       isLoading: false,
@@ -62,6 +63,10 @@ class LunchForm extends Component {
     });
   }
 
+  handleBlur(e) {
+    this.props.handleTextChange({ target: { name: 'location', value: e.target.defaultValue } });
+  }
+
   render() {
     const { location, cost, revisit } = this.props.form;
     const { handleTextChange, handleButtonChange, handleSubmit } = this.props;
@@ -78,6 +83,7 @@ class LunchForm extends Component {
               minLength={3}
               onSearch={this.handleSearch}
               onChange={this.handleTextChange}
+              onBlur={this.handleBlur}
               allowNew
               selected={location ? [location] : []}
               name="location"
