@@ -1,4 +1,5 @@
 const queries = require('./queries');
+const db = require('../../infrastructure/database');
 
 const createLunch = async (req, res) => {
   const {
@@ -17,7 +18,10 @@ const createLunch = async (req, res) => {
     lunchDate,
   };
 
-  const lunchId = await queries.createLunch(lunchToSave);
+  let lunchId;
+  await db.transaction(async (trx) => {
+    lunchId = await queries.createLunch(trx, lunchToSave);
+  });
 
   res.json({
     lunchId,
