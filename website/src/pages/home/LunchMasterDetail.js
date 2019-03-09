@@ -109,12 +109,18 @@ class LunchMasterDetail extends Component {
       lunchDate: this.state.form.lunchDate,
     };
 
-    const fn = this.state.currentLunchId ? this.updateLunch : this.createLunch;
+    const isCreate = !this.state.currentLunchId;
+    const fn = isCreate ? this.createLunch : this.updateLunch;
 
     try {
-      await fn(postBody);
+      const { data: returnedLunch } = await fn(postBody);
+      const lunch = {
+        ...returnedLunch,
+        lunchDate: returnedLunch.lunchDate.toString().substring(0, 10),
+      };
       this.setState({
         validationErrors: [],
+        lunches: [...this.state.lunches, lunch],
       });
     } catch (err) {
       if (err.response) {

@@ -6,7 +6,6 @@ const updateLunch = async (req, res) => {
     location,
     cost,
     revisit,
-    date,
   } = req.body;
   const { appUserId, lunchId } = req.params;
 
@@ -16,7 +15,6 @@ const updateLunch = async (req, res) => {
     location,
     cost,
     revisit,
-    date,
   };
 
   await db.transaction(async (trx) => {
@@ -25,6 +23,9 @@ const updateLunch = async (req, res) => {
 
   res.json({
     lunchId,
+    location,
+    revisit,
+    cost,
   });
 };
 
