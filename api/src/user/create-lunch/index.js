@@ -25,6 +25,10 @@ const createLunch = async (req, res) => {
 
   res.json({
     lunchId,
+    location,
+    revisit,
+    lunchDate,
+    cost,
   });
 };
 

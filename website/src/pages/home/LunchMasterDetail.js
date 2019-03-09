@@ -109,12 +109,27 @@ class LunchMasterDetail extends Component {
       lunchDate: this.state.form.lunchDate,
     };
 
-    const fn = this.state.currentLunchId ? this.updateLunch : this.createLunch;
+    const isCreate = !this.state.currentLunchId;
+    const fn = isCreate ? this.createLunch : this.updateLunch;
+
+    let existingIndex;
+    let existingDate;
+    if (!isCreate) {
+      existingIndex = this.state.lunches.findIndex(x => x.lunchId === this.state.currentLunchId);
+      existingDate = this.state.lunches[existingIndex].lunchDate;
+    }
 
     try {
-      await fn(postBody);
+      const { data: returnedLunch } = await fn(postBody);
+      const lunch = {
+        ...returnedLunch,
+        lunchDate: isCreate ? returnedLunch.lunchDate.toString().substring(0, 10) : existingDate,
+      };
       this.setState({
         validationErrors: [],
+        lunches: isCreate ?
+          [...this.state.lunches, lunch] :
+          [...this.state.lunches.filter(x => x.lunchId !== this.state.currentLunchId), lunch],
       });
     } catch (err) {
       if (err.response) {
