@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
+import { post } from '../../api';
+import ValidationMessages from '../../components/ValidationMessages';
+import AppContext from '../../AppContext';
 
-class Register extends Component {
+class RegistrationForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -25,33 +27,34 @@ class Register extends Component {
 
   async handleSubmit(submitEvent) {
     submitEvent.preventDefault();
+
     const postBody = {
       emailAddress: this.state.emailAddress,
       password: this.state.password,
       passwordConfirmation: this.state.passwordConfirmation,
     };
+
+    const fetchName = 'registrationForm';
     try {
-      await axios.post('/api/authentication/registerUser', postBody);
+      await post('/api/authentication/registerUser', postBody, fetchName, this.context);
       this.setState({
         validationErrors: [],
       });
+      this.props.onSuccessfulRegistration();
     } catch (err) {
       if (err.response) {
         this.setState({
-          validationErrors: err.response.data.errors.map(valErr => valErr.message),
+          validationErrors: err.response.data.errors,
         });
       }
     }
   }
 
   render() {
-    const validationListItems = this.state.validationErrors.map(x => <li key={x}>{x}</li>);
-    const validationList = <ul>{validationListItems}</ul>;
-    const validationDiv = <div className="alert alert-danger">{validationList}</div>;
     return (
-      <div className="col-md-4">
+      <Col md={4}>
         <h1>Register</h1>
-        {this.state.validationErrors.length ? validationDiv : null}
+        <ValidationMessages errors={this.state.validationErrors} />
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="registrationFormEmailAddress">
             <ControlLabel>Email address</ControlLabel>
@@ -85,8 +88,10 @@ class Register extends Component {
           </FormGroup>
           <Button type="submit">Register</Button>
         </form >
-      </div>);
+      </Col>);
   }
 }
 
-export default Register;
+RegistrationForm.contextType = AppContext;
+
+export default RegistrationForm;

@@ -13,6 +13,9 @@ const knex = knexFactory({
 
 const queryBuilder = () => knex.queryBuilder();
 
+const { transaction } = knex;
+
 module.exports = {
   queryBuilder,
+  transaction,
 };

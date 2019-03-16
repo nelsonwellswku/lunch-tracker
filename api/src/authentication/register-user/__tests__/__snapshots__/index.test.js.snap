@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`register user endpoint; can register a new user: create app user 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testTransaction",
+      Object {
+        "emailAddress": "TestUsername",
+        "passwordHash": "testHashedPassword",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`register user endpoint; can register a new user: creates registration token 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testTransaction",
+      "fakeUuid",
+      "fakeAppUserId",
+    ],
+  ],
+}
+`;
+
+exports[`register user endpoint; can register a new user: send status 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      201,
+    ],
+  ],
+}
+`;
+
+exports[`register user endpoint; throws error if email address is already in use 1`] = `[Error: Email address TestUsername is not available.]`;
