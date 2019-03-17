@@ -7,7 +7,7 @@ namespace Octogami.LunchTracker.Api.Features.Restaurant.GetRestaurants
 {
     public class GetRestaurantsRequest : IRequest<GetRestaurantsResponse>
     {
-        public string SearchTerm { get; set; }
+        public string Name { get; set; }
 
         public bool Verified { get; set; } = true;
     }

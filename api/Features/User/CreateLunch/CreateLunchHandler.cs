@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using NSwag.Annotations;
 
 namespace Octogami.LunchTracker.Api.Features.User.CreateLunch
@@ -8,6 +9,7 @@ namespace Octogami.LunchTracker.Api.Features.User.CreateLunch
     public class CreateLunchRequest : IRequest<CreateLunchResponse>
     {
         [SwaggerIgnore]
+        [JsonIgnore]
         public int UserId { get; set; }
 
         public string Restaurant { get; set; }

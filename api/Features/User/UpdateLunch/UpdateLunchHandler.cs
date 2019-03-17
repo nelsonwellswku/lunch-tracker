@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using NSwag.Annotations;
 
 namespace Octogami.LunchTracker.Api.Features.User.UpdateLunch
@@ -8,9 +9,11 @@ namespace Octogami.LunchTracker.Api.Features.User.UpdateLunch
     public class UpdateLunchRequest : IRequest<UpdateLunchResponse>
     {
         [SwaggerIgnore]
+        [JsonIgnore]
         public int UserId { get; set; }
 
         [SwaggerIgnore]
+        [JsonIgnore]
         public int LunchId { get; set; }
 
         public string Revisit { get; set; }
@@ -22,6 +25,7 @@ namespace Octogami.LunchTracker.Api.Features.User.UpdateLunch
 
     public class UpdateLunchResponse
     {
+        public int LunchId { get; set; }
     }
 
     public class UpdateLunchRequestHandler : IRequestHandler<UpdateLunchRequest, UpdateLunchResponse>
@@ -32,4 +36,3 @@ namespace Octogami.LunchTracker.Api.Features.User.UpdateLunch
         }
     }
 }
-
