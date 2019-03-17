@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
+using NSwag.Annotations;
 
 public class GetLunchesRequest : IRequest<GetLunchesResponse>
 {
+    [SwaggerIgnore]
     public int UserId { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

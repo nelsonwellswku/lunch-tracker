@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -12,19 +13,36 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("/api/{userId}/lunch")]
+    [HttpGet("{userId}/lunch")]
     public async Task<ActionResult<GetLunchesResponse>> GetLunches(
         int userId,
-        [FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate)
+        [FromQuery] GetLunchesRequest request)
     {
-        var result = await _mediator.Send(new GetLunchesRequest
-        {
-            UserId = userId,
-            StartDate = startDate,
-            EndDate = endDate
-        });
+        request.UserId = userId;
+        var result = await _mediator.Send(request);
+        return Ok(result);
+    }
 
+    [HttpPost("{userId}/lunch")]
+    public async Task<ActionResult<CreateLunchResponse>> CreateLunch(
+        int userId,
+        [FromBody] CreateLunchRequest request)
+    {
+        request.UserId = userId;
+        var result = await _mediator.Send(request);
+        return Ok(result);
+    }
+
+    [HttpPut("{userId}/lunch/{lunchId}")]
+    public async Task<ActionResult<UpdateLunchResponse>> UpdateLunch(
+        int userId,
+        int lunchId,
+        [FromBody] UpdateLunchRequest request
+    )
+    {
+        request.UserId = userId;
+        request.LunchId = lunchId;
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
 }
