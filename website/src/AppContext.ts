@@ -1,12 +1,16 @@
 import React from "react";
 
-interface IAppContextValues {
+export interface IAppContext {
   login: (token: string) => void,
   logout: () => void,
-  user: { authToken: string } | null,
+  user: IUser | null,
 }
 
-const AppContext = React.createContext<IAppContextValues>({
+export interface IUser {
+  authToken: string,
+}
+
+const AppContext = React.createContext<IAppContext>({
   login: (token: string) => { },
   logout: () => { },
   user: null,
