@@ -19,6 +19,11 @@ namespace api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.AddJsonFile("appsettings.json");
+                    config.AddUserSecrets<Startup>();
+                })
                 .UseStartup<Startup>();
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Octogami.LunchTracker.Api.Features.User.CreateLunch;
+using Octogami.LunchTracker.Api.Features.User.GetJwt;
 using Octogami.LunchTracker.Api.Features.User.GetLunch;
 using Octogami.LunchTracker.Api.Features.User.UpdateLunch;
 
@@ -16,6 +17,13 @@ namespace Octogami.LunchTracker.Api.Features.User
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpPost("getJwt")]
+        public async Task<ActionResult<GetJwtResponse>> GetJwt([FromBody]GetJwtRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return result;
         }
 
         [HttpGet("{userId}/lunch")]
@@ -52,4 +60,3 @@ namespace Octogami.LunchTracker.Api.Features.User
         }
     }
 }
-
