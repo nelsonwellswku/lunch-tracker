@@ -43,7 +43,7 @@
       "typeStyle": "Interface",
       "classTypes": [],
       "extendedClasses": [],
-      "extensionCode": "./website/src/api/client-base.ts",
+      "extensionCode": "website/src/api/client-base.ts",
       "generateDefaultValues": true,
       "excludedTypeNames": [],
       "handleReferences": false,
@@ -60,7 +60,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "./website/src/api/generated.ts"
+      "output": "website/src/api/generated.ts"
     }
   }
 }
