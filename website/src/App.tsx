@@ -6,6 +6,7 @@ import SignIn from './components/SignIn';
 import SignOut from './components/SignOut';
 import PageNotFound from './components/PageNotFound';
 import Home from './components/Home';
+import { UserClient, GetJwtRequest, GetJwtResponse } from './api/generated';
 
 const AUTH_TOKEN = 'authToken';
 
@@ -14,9 +15,16 @@ const App = () => {
   const [user, setUser] = useState<IUser | null>(token ? { authToken: token } : null);
 
   const login = (token: string) => {
-    window.localStorage.setItem(AUTH_TOKEN, token);
-    setUser({
-      authToken: token
+
+    const client = new UserClient("http://localhost:3000");
+    client.getJwt({
+      externalToken: token,
+    }).then((response: GetJwtResponse | null) => {
+      if (response == null || !response.token) return;
+      window.localStorage.setItem(AUTH_TOKEN, response.token);
+      setUser({
+        authToken: token
+      })
     })
   };
 

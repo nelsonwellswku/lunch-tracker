@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Spinner from 'react-bootstrap/Spinner'
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import AppContext, { IAppContext } from '../../AppContext';
 import { Redirect } from 'react-router';
 
 const SignIn = ({ login, user }: IAppContext) => {
+
+  const [fetching, setFetching] = useState(false);
 
   const handleSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     if ((response as GoogleLoginResponse).getAuthResponse) {
@@ -17,6 +20,14 @@ const SignIn = ({ login, user }: IAppContext) => {
 
   if (user) {
     return <Redirect to="/" />;
+  }
+
+  if (fetching) {
+    return (
+      <Container>
+        <h1 className="mt-3"><Spinner animation="border" /></h1>
+      </Container>
+    );
   }
 
   return (
@@ -32,7 +43,8 @@ const SignIn = ({ login, user }: IAppContext) => {
           <GoogleLogin
             clientId={'214419819681-puljv1g8q8hob1b7oemi5uiacilo3165.apps.googleusercontent.com'}
             onSuccess={handleSuccess}
-            onFailure={() => { }}
+            onFailure={() => setFetching(false)}
+            onRequest={() => setFetching(true)}
           />
         </Col>
       </Row>

@@ -110,9 +110,21 @@ namespace Octogami.LunchTracker.Api.Features.User.GetJwt
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var header = new JwtHeader(credentials);
+            var unixNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var payload = new JwtPayload
             {
-                { "appUserId", user.AppUserId }
+                // typical fields
+                { "iss", "lunchtracker" },
+                { "sub", user.AppUserId },
+                { "aud", "any" },  // TODO
+                { "exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds() },
+                { "nbf",  unixNow },
+                { "iat", unixNow },
+
+                // custom fields
+                { "appUserId", user.AppUserId },
+                { "firstName", user.FirstName },
+                { "lastName", user.LastName }
             };
             var jwtSecurityToken = new JwtSecurityToken(header, payload);
             var jwtHandler = new JwtSecurityTokenHandler();
@@ -120,6 +132,4 @@ namespace Octogami.LunchTracker.Api.Features.User.GetJwt
             return tokenString;
         }
     }
-
-
 }

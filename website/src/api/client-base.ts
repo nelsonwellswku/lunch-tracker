@@ -1,9 +1,9 @@
 export default class ClientBase {
-  async transformOptions(requestInit: RequestInit): Promise<RequestInit> {
-    return requestInit;
+  transformOptions(options: RequestInit): Promise<RequestInit> {
+    return Promise.resolve(options);
   }
 
-  async transformResult(url: string, response: Response, processor: (response: Response) => any) {
+  transformResult(url: string, response: Response, processor: (response: Response) => Promise<any>): Promise<any> {
     return processor(response);
   }
 }
