@@ -6,7 +6,6 @@ interface IAppConfig {
 
 const validate = (appConfig: IAppConfig): IAppConfig => {
   if (!appConfig.BaseUrl || !appConfig.GoogleClientId) {
-    console.log(process.env);
     throw new Error("App configuration is invalid.");
   }
   return appConfig;

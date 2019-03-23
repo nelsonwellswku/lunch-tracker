@@ -6,7 +6,6 @@ import Spinner from 'react-bootstrap/Spinner'
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { Redirect } from 'react-router';
 import AppContext from '../../AppContext';
-import AppConfig from '../../appConfig';
 import appConfig from '../../appConfig';
 
 const SignIn = () => {
