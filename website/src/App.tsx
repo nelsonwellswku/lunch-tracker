@@ -7,7 +7,6 @@ import SignOut from './components/SignOut';
 import PageNotFound from './components/PageNotFound';
 import Home from './components/Home';
 import { UserClient } from './api/generated';
-import AppConfig from './appConfig';
 import appConfig from './appConfig';
 
 const AUTH_TOKEN = 'authToken';

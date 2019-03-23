@@ -38,4 +38,3 @@ namespace Octogami.LunchTracker.Api.Features.User.GetLunch
         }
     }
 }
-
