@@ -4,8 +4,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner'
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import AppContext from '../../AppContext';
 import { Redirect } from 'react-router';
+import AppContext from '../../AppContext';
+import AppConfig from '../../appConfig';
+import appConfig from '../../appConfig';
 
 const SignIn = () => {
 
@@ -42,7 +44,7 @@ const SignIn = () => {
       <Row>
         <Col>
           <GoogleLogin
-            clientId={'214419819681-puljv1g8q8hob1b7oemi5uiacilo3165.apps.googleusercontent.com'}
+            clientId={appConfig.GoogleClientId}
             onSuccess={handleSuccess}
             onFailure={() => setFetching(false)}
             onRequest={() => setFetching(true)}
