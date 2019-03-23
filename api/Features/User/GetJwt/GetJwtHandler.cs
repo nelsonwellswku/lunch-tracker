@@ -1,9 +1,11 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using Octogami.LunchTracker.Api.Infrastructure.Configuration.Crypto;
@@ -22,20 +24,60 @@ namespace Octogami.LunchTracker.Api.Features.User.GetJwt
         public string Token { get; set; }
     }
 
+    public class GetJwtRequestValidation : AbstractValidator<GetJwtRequest>
+    {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IJwtDecoder _jwtDecoder;
+
+        private const string INVALID_GOOGLE_TOKEN = "Invalid Google token provided.";
+
+        public GetJwtRequestValidation(IHttpClientFactory httpClientFactory, IJwtDecoder jwtDecoder)
+        {
+            RuleFor(x => x.ExternalToken)
+                .Must(BeIssuedByGoogle).WithMessage(INVALID_GOOGLE_TOKEN)
+                .When(request => BeIssuedByGoogle(request.ExternalToken))
+                .MustAsync(BeValidatedByGoogle).WithMessage(INVALID_GOOGLE_TOKEN);
+
+            _httpClientFactory = httpClientFactory;
+            _jwtDecoder = jwtDecoder;
+        }
+
+        private bool BeIssuedByGoogle(string jwt)
+        {
+            var decoded = _jwtDecoder.DecodeJwt(jwt);
+            if (decoded.Issuer != "accounts.google.com" || decoded.Issuer != "https://accounts.google.com")
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<bool> BeValidatedByGoogle(string jwt, CancellationToken cancellationToken)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var url = $"https://oauth2.googleapis.com/tokeninfo?id_token={jwt}";
+            var response = await httpClient.GetAsync(url);
+            return response.IsSuccessStatusCode;
+        }
+    }
+
     public class GetJwtRequestHandler : IRequestHandler<GetJwtRequest, GetJwtResponse>
     {
         private readonly LunchTrackerContext _db;
         private readonly CryptoConfiguration _cryptoConfiguration;
+        private readonly IJwtDecoder _jwtDecoder;
 
-        public GetJwtRequestHandler(LunchTrackerContext db, CryptoConfiguration cryptoConfiguration)
+        public GetJwtRequestHandler(LunchTrackerContext db, CryptoConfiguration cryptoConfiguration, IJwtDecoder jwtDecoder)
         {
             _db = db;
             _cryptoConfiguration = cryptoConfiguration;
+            _jwtDecoder = jwtDecoder;
         }
 
         public async Task<GetJwtResponse> Handle(GetJwtRequest request, CancellationToken cancellationToken)
         {
-            var decodedUserData = DecodeJwt(request.ExternalToken);
+            var decodedUserData = _jwtDecoder.DecodeJwt(request.ExternalToken);
             var user = _db.AppUser.FirstOrDefault(x => x.ExternalUserId == decodedUserData.ExternalUserId);
 
             if (user == null)
@@ -62,20 +104,6 @@ namespace Octogami.LunchTracker.Api.Features.User.GetJwt
             return getJwtResponse;
         }
 
-        private DecodedUserData DecodeJwt(string jwt)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadJwtToken(jwt);
-            return new DecodedUserData
-            {
-                Issuer = jsonToken.Claims.First(x => x.Type == "iss").Value,
-                Audience = jsonToken.Claims.First(x => x.Type == "aud").Value,
-                ExternalUserId = jsonToken.Claims.First(x => x.Type == "sub").Value,
-                FirstName = jsonToken.Claims.First(x => x.Type == "given_name").Value,
-                LastName = jsonToken.Claims.First(x => x.Type == "family_name").Value,
-            };
-        }
-
         private string CreateJwt(AppUser user)
         {
             var key = _cryptoConfiguration.JwtKey;
@@ -93,16 +121,5 @@ namespace Octogami.LunchTracker.Api.Features.User.GetJwt
         }
     }
 
-    public class DecodedUserData
-    {
-        public string Issuer { get; set; }
 
-        public string Audience { get; set; }
-
-        public string ExternalUserId { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-    }
 }
