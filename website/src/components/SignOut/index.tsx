@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppContext, { IAppContext } from '../../AppContext';
 import { Redirect } from 'react-router';
 
-const SignOut = ({ logout }: IAppContext) => {
+const SignOut = () => {
+  const { logout } = useContext(AppContext);
   logout();
   return <Redirect to='/' />
 };
 
-export default () => (
-  <AppContext.Consumer>
-    {values => <SignOut {...values} />}
-  </AppContext.Consumer>
-);
+export default SignOut;

@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner'
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import AppContext, { IAppContext } from '../../AppContext';
+import AppContext from '../../AppContext';
 import { Redirect } from 'react-router';
 
-const SignIn = ({ login, user }: IAppContext) => {
+const SignIn = () => {
 
+  const { login, user } = useContext(AppContext);
   const [fetching, setFetching] = useState(false);
 
   const handleSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -52,8 +53,4 @@ const SignIn = ({ login, user }: IAppContext) => {
   );
 };
 
-export default () => (
-  <AppContext.Consumer>
-    {values => <SignIn {...values} />}
-  </AppContext.Consumer>
-);
+export default SignIn;

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import AppContext, { IAppContext } from '../../AppContext';
-import { Link, NavLink } from 'react-router-dom';
+import AppContext from '../../AppContext';
+import { NavLink } from 'react-router-dom';
 
-const MainNav = ({ user }: IAppContext) => {
+const MainNav = () => {
+
+  const { user } = useContext(AppContext);
 
   return (
     <Navbar bg="light" variant="light">
@@ -18,8 +20,4 @@ const MainNav = ({ user }: IAppContext) => {
   );
 };
 
-export default () => (
-  <AppContext.Consumer>
-    {value => <MainNav {...value} />}
-  </AppContext.Consumer>
-);
+export default MainNav;
