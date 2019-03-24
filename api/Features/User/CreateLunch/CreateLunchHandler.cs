@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -17,6 +18,8 @@ namespace Octogami.LunchTracker.Api.Features.User.CreateLunch
         public string Revisit { get; set; }
 
         public float Cost { get; set; }
+
+        public DateTime LunchDate { get; set; }
     }
 
     public class CreateLunchResponse

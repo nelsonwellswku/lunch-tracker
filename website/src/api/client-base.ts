@@ -4,6 +4,13 @@ export default class ClientBase {
   }
 
   transformOptions(options: RequestInit): Promise<RequestInit> {
+    if (this.authorizationToken) {
+      options.headers = new Headers({
+        ...options.headers,
+        'authorization': 'Bearer ' + this.authorizationToken,
+      });
+    }
+
     return Promise.resolve(options);
   }
 
