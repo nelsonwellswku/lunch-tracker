@@ -15,6 +15,8 @@ namespace Octogami.LunchTracker.Api.Infrastructure.Data
 
         public DbSet<Restaurant> Restaurant { get; set; }
 
+        public DbSet<Revisit> Revisit { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("lt");
@@ -33,6 +35,9 @@ namespace Octogami.LunchTracker.Api.Infrastructure.Data
                     new Revisit { RevisitId = 1, Value = "Unsure" },
                     new Revisit { RevisitId = 2, Value = "Yes" },
                     new Revisit { RevisitId = 3, Value = "No" });
+
+            modelBuilder.Entity<Lunch>()
+                .HasAlternateKey(x => new { x.AppUserId, x.Date });
 
             modelBuilder.Entity<Restaurant>()
                 .HasData(

@@ -22,6 +22,7 @@ using NSwag;
 using NSwag.SwaggerGeneration.Processors.Security;
 using Octogami.LunchTracker.Api.Features.Infrastructure.Behaviors;
 using Octogami.LunchTracker.Api.Features.User.GetJwt;
+using Octogami.LunchTracker.Api.Infrastructure;
 using Octogami.LunchTracker.Api.Infrastructure.Configuration.Crypto;
 using Octogami.LunchTracker.Api.Infrastructure.Data;
 using Octogami.LunchTracker.Api.Infrastructure.HttpMiddleware;
@@ -89,7 +90,10 @@ namespace api
                 };
             });
 
+            services.AddScoped<ICurrentUserReader, CurrentUserReader>();
+
             services.AddHttpClient();
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

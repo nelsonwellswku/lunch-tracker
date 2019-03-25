@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Octogami.LunchTracker.Api.Infrastructure.Data;
 
 namespace Octogami.LunchTracker.Api.Migrations
 {
     [DbContext(typeof(LunchTrackerContext))]
-    partial class LunchTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20190324224714_AddDateToLunch")]
+    partial class AddDateToLunch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,7 +97,7 @@ namespace Octogami.LunchTracker.Api.Migrations
 
                     b.HasKey("LunchId");
 
-                    b.HasAlternateKey("AppUserId", "Date");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("RestaurantId");
 

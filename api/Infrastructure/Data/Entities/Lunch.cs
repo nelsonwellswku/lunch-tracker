@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,5 +29,9 @@ namespace Octogami.LunchTracker.Api.Infrastructure.Data.Entities
 
         [Required]
         public Revisit Revisit { get; set; }
+
+        [Required]
+        [Column(TypeName = "date")]
+        public DateTime Date { get; set; }
     }
 }
