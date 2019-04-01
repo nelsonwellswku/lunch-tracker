@@ -1,12 +1,14 @@
 import React from 'react';
 
+export type RevisitEnum = 'unsure' | 'yes' | 'no';
+
 export interface ILunch {
+  lunchId: number;
   restaurant: string | null,
   cost: number | null,
-  revisit: 'unsure' | 'yes' | 'no',
-  date: Date,
+  revisit: RevisitEnum | null,
+  date: Date | null,
 }
-
 
 export interface ILunchContext {
   lunches: {

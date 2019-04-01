@@ -100,12 +100,6 @@ const LunchForm = () => {
 
     setFormError(null);
     if (response.lunchId) {
-      lunchContext.addLunch(response.lunchId, {
-        restaurant: restaurant.value || null,
-        cost: cost.value || null,
-        revisit: revisit.value || null,
-        date: lunchDate.value || null,
-      });
       lunchContext.setCurrentLunchId(response.lunchId);
     }
   };
