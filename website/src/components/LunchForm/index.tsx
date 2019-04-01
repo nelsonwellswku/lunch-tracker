@@ -6,10 +6,11 @@ import { ReplaceProps, BsPrefixProps } from 'react-bootstrap/helpers';
 import { FormControlProps } from 'react-bootstrap/FormControl';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import AppContext from '../../AppContext';
-import { UserClient } from '../../api/generated';
+import AppContext from '../../contexts/AppContext';
+import { UserClient, CreateOrUpdateLunchResponse } from '../../api/generated';
 import appConfig from '../../appConfig';
 import startOfDay from 'date-fns/startOfDay';
+import LunchContext from '../../contexts/LunchContext';
 
 type FormInputEvent = React.FormEvent<ReplaceProps<"input", BsPrefixProps<"input"> & FormControlProps>>;
 
@@ -22,6 +23,7 @@ type RevisitEnum = 'unsure' | 'yes' | 'no';
 
 const LunchForm = () => {
   const appContext = useContext(AppContext);
+  const lunchContext = useContext(LunchContext);
   const [restaurant, setRestaurant] = useState<IFormField<string | null>>({ value: null, isValid: undefined, });
   const [cost, setCost] = useState<IFormField<number | null>>({ value: null, isValid: undefined, });
   const [revisit, setRevisit] = useState<IFormField<RevisitEnum>>({ value: 'unsure', isValid: undefined });
@@ -75,7 +77,7 @@ const LunchForm = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setHasTriedSubmission(true);
 
     if (!validateForm()) {
@@ -89,13 +91,23 @@ const LunchForm = () => {
     }
     const client = new UserClient(appConfig.BaseUrl);
     client.authorizationToken = user.authToken;
-    client.createLunch(user.appUserId, {
+    let response: CreateOrUpdateLunchResponse;
+    response = await client.createOrUpdateLunch(user.appUserId, lunchDate.value, {
       cost: cost.value ? cost.value : undefined,
       restaurant: restaurant.value ? restaurant.value : undefined,
       revisit: revisit.value,
-      lunchDate: lunchDate.value,
-    })
+    }) || {};
+
     setFormError(null);
+    if (response.lunchId) {
+      lunchContext.addLunch(response.lunchId, {
+        restaurant: restaurant.value || null,
+        cost: cost.value || null,
+        revisit: revisit.value || null,
+        date: lunchDate.value || null,
+      });
+      lunchContext.setCurrentLunchId(response.lunchId);
+    }
   };
 
   return (

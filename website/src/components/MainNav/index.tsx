@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import AppContext from '../../AppContext';
+import AppContext from '../../contexts/AppContext';
 import { NavLink } from 'react-router-dom';
 
 const MainNav = () => {

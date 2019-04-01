@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import MainNav from './components/MainNav';
-import AppContext, { IUser, IJwtPayload } from './AppContext';
+import AppContext, { IUser, IJwtPayload } from './contexts/AppContext';
 import SignIn from './components/SignIn';
 import SignOut from './components/SignOut';
 import PageNotFound from './components/PageNotFound';

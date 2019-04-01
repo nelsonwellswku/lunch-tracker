@@ -1,4 +1,4 @@
-import { IJwtPayload } from "../AppContext";
+import { IJwtPayload } from "../contexts/AppContext";
 
 const decodeJwt = (token: string): IJwtPayload | null => {
   var payload = token.split('.')[1];

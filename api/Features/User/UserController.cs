@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Octogami.LunchTracker.Api.Features.User.CreateLunch;
+using Octogami.LunchTracker.Api.Features.User.CreateOrUpdateLunch;
 using Octogami.LunchTracker.Api.Features.User.GetJwt;
-using Octogami.LunchTracker.Api.Features.User.GetLunch;
-using Octogami.LunchTracker.Api.Features.User.UpdateLunch;
+using Octogami.LunchTracker.Api.Features.User.GetLunches;
 
 namespace Octogami.LunchTracker.Api.Features.User
 {
@@ -39,27 +38,16 @@ namespace Octogami.LunchTracker.Api.Features.User
             return Ok(result);
         }
 
-        [HttpPost("{userId}/lunch")]
-        public async Task<ActionResult<CreateLunchResponse>> CreateLunch(
+        [HttpPut("{userId}/lunch/date/{lunchDate}")]
+        public async Task<ActionResult<CreateOrUpdateLunchResponse>> CreateOrUpdateLunch(
             int userId,
-            [FromBody] CreateLunchRequest request)
+            DateTime lunchDate,
+            [FromBody]CreateOrUpdateLunchRequest request)
         {
             request.UserId = userId;
-            var result = await _mediator.Send(request);
-            return Ok(result);
-        }
-
-        [HttpPut("{userId}/lunch/{lunchId}")]
-        public async Task<ActionResult<UpdateLunchResponse>> UpdateLunch(
-            int userId,
-            int lunchId,
-            [FromBody] UpdateLunchRequest request
-        )
-        {
-            request.UserId = userId;
-            request.LunchId = lunchId;
-            var result = await _mediator.Send(request);
-            return Ok(result);
+            request.Date = lunchDate;
+            var response = await _mediator.Send(request);
+            return Ok(response);
         }
     }
 }
