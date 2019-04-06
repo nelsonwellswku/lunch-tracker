@@ -101,6 +101,13 @@ const LunchForm = () => {
     setFormError(null);
     if (response.lunchId) {
       lunchContext.setCurrentLunchId(response.lunchId);
+      lunchContext.updateLunch(response.lunchId, {
+        lunchId: response.lunchId,
+        cost: cost.value,
+        restaurant: restaurant.value,
+        revisit: revisit.value,
+        date: new Date(lunchDate.value)
+      })
     }
   };
 
