@@ -10,7 +10,7 @@ import AppContext from '../../contexts/AppContext';
 import { UserClient, CreateOrUpdateLunchResponse } from '../../api/generated';
 import appConfig from '../../appConfig';
 import startOfDay from 'date-fns/startOfDay';
-import LunchContext from '../../contexts/LunchContext';
+import LunchContext, { RevisitEnum } from '../../contexts/LunchContext';
 
 type FormInputEvent = React.FormEvent<ReplaceProps<"input", BsPrefixProps<"input"> & FormControlProps>>;
 
@@ -18,8 +18,6 @@ interface IFormField<T> {
   value: T,
   isValid: boolean | undefined,
 }
-
-type RevisitEnum = 'unsure' | 'yes' | 'no';
 
 const LunchForm = () => {
   const appContext = useContext(AppContext);
@@ -106,8 +104,8 @@ const LunchForm = () => {
         cost: cost.value,
         restaurant: restaurant.value,
         revisit: revisit.value,
-        date: new Date(lunchDate.value)
-      })
+        date: lunchDate.value,
+      });
     }
   };
 

@@ -63,7 +63,7 @@ const LunchFormAndCalendar = () => {
   return (
     <LunchContext.Provider value={lunchContext}>
       <Row>
-        <Col>
+        <Col md={3}>
           <LunchForm />
         </Col>
         <Col>

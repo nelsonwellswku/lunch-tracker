@@ -1,18 +1,34 @@
-import React, { useContext } from "react";
-import LunchContext from "../../contexts/LunchContext";
+import React, { useContext } from 'react';
+import Calendar from 'react-big-calendar';
+import moment from 'moment';
 import map from 'lodash/map';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import LunchContext from '../../contexts/LunchContext';
 
-const LunchCalendar = () => {
+const LunchCalendar = (props: any) => {
+
   const lunchContext = useContext(LunchContext);
 
-  return (
-    <div>
-      <h2>Calendar</h2>
-      {map(lunchContext.lunches, lunch => (
-        <p>{`${lunch.restaurant} - ${lunch.cost}`}</p>
-      ))}
-    </div>
-  )
+  const events = map(lunchContext.lunches, (lunch) => {
+    return {
+      lunchId: lunch.lunchId,
+      title: `$${lunch.cost} - ${lunch.restaurant}`,
+      start: lunch.date,
+      end: lunch.date,
+      allDay: true,
+    };
+  });
+
+  return (<Calendar
+    localizer={Calendar.momentLocalizer(moment)}
+    defaultDate={new Date()}
+    defaultView="month"
+    events={events}
+    style={{ height: '80vh' }}
+    views={{ month: true }}
+    selectable
+    {...props}
+  />);
 };
 
 export default LunchCalendar;

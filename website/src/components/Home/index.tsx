@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <Container>
-      <h1 className='mt-3'>Welcome to Lunch Tracker</h1>
+      <h1 className='mt-3 mb-4'>Welcome to Lunch Tracker</h1>
       {
         !context.user ? <p>Sign in to get started</p> : <LunchFormAndCalendar />
       }
