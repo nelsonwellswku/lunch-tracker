@@ -15,16 +15,14 @@ export interface ILunchContext {
     [key: number]: ILunch
   },
   currentLunchId: number | null,
-  addLunch: (lunchId: number, lunch: ILunch) => void,
-  updateLunch: (lunchId: number, lunch: ILunch) => void;
+  AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => void;
   setCurrentLunchId: (lunchId: number) => void;
 }
 
 const LunchContext = React.createContext<ILunchContext>({
   lunches: {},
   currentLunchId: null,
-  addLunch: (lunchId: number, lunch: ILunch) => { },
-  updateLunch: (lunchId: number, lunch: ILunch) => { },
+  AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => { },
   setCurrentLunchId: (lunchId: number) => { },
 });
 

@@ -5,7 +5,7 @@ import map from 'lodash/map';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import LunchContext from '../../contexts/LunchContext';
 
-const LunchCalendar = (props: any) => {
+const LunchCalendar = () => {
 
   const lunchContext = useContext(LunchContext);
 
@@ -19,16 +19,18 @@ const LunchCalendar = (props: any) => {
     };
   });
 
-  return (<Calendar
-    localizer={Calendar.momentLocalizer(moment)}
-    defaultDate={new Date()}
-    defaultView="month"
-    events={events}
-    style={{ height: '80vh' }}
-    views={{ month: true }}
-    selectable
-    {...props}
-  />);
+  return (
+    <div style={{ height: "80vh" }}>
+      <Calendar
+        localizer={Calendar.momentLocalizer(moment)}
+        defaultDate={new Date()}
+        defaultView="month"
+        events={events}
+        selectable
+        views={['month']}
+      />
+    </div>
+  );
 };
 
 export default LunchCalendar;

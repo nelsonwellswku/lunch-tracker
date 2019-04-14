@@ -7,10 +7,12 @@ import { FormControlProps } from 'react-bootstrap/FormControl';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import AppContext from '../../contexts/AppContext';
-import { UserClient, CreateOrUpdateLunchResponse } from '../../api/generated';
+import { UserClient, CreateOrUpdateLunchResponse, SwaggerException } from '../../api/generated';
 import appConfig from '../../appConfig';
 import startOfDay from 'date-fns/startOfDay';
 import LunchContext, { RevisitEnum } from '../../contexts/LunchContext';
+import map from 'lodash/map';
+import flatMap from 'lodash/flatMap';
 
 type FormInputEvent = React.FormEvent<ReplaceProps<"input", BsPrefixProps<"input"> & FormControlProps>>;
 
@@ -26,7 +28,7 @@ const LunchForm = () => {
   const [cost, setCost] = useState<IFormField<number | null>>({ value: null, isValid: undefined, });
   const [revisit, setRevisit] = useState<IFormField<RevisitEnum>>({ value: 'unsure', isValid: undefined });
   const [lunchDate, setLunchDate] = useState<IFormField<Date>>({ value: startOfDay(new Date()), isValid: undefined });
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | string[] | null>(null);
   const [hasTriedSubmission, setHasTriedSubmission] = useState<boolean>(false);
 
   const validateRestaurant = () => !!restaurant.value;
@@ -90,29 +92,47 @@ const LunchForm = () => {
     const client = new UserClient(appConfig.BaseUrl);
     client.authorizationToken = user.authToken;
     let response: CreateOrUpdateLunchResponse;
-    response = await client.createOrUpdateLunch(user.appUserId, lunchDate.value, {
-      cost: cost.value ? cost.value : undefined,
-      restaurant: restaurant.value ? restaurant.value : undefined,
-      revisit: revisit.value,
-    }) || {};
-
-    setFormError(null);
-    if (response.lunchId) {
-      lunchContext.setCurrentLunchId(response.lunchId);
-      lunchContext.updateLunch(response.lunchId, {
-        lunchId: response.lunchId,
-        cost: cost.value,
-        restaurant: restaurant.value,
+    try {
+      response = await client.createOrUpdateLunch(user.appUserId, lunchDate.value, {
+        cost: cost.value ? cost.value : undefined,
+        restaurant: restaurant.value ? restaurant.value : undefined,
         revisit: revisit.value,
-        date: lunchDate.value,
-      });
+      }) || {};
+
+      setFormError(null);
+      if (response.lunchId) {
+        lunchContext.setCurrentLunchId(response.lunchId);
+        lunchContext.AddOrUpdateLunch(response.lunchId, {
+          lunchId: response.lunchId,
+          cost: cost.value,
+          restaurant: restaurant.value,
+          revisit: revisit.value,
+          date: lunchDate.value,
+        });
+      }
+    } catch (error) {
+      if (error instanceof SwaggerException && error.status >= 400 && error.status < 500) {
+
+        interface IResultType {
+          Field: string,
+          Messages: string[],
+        }
+
+        const failures: IResultType[] = JSON.parse(error.response);
+        const messages = flatMap(failures, x => x.Messages);
+        setFormError(messages);
+      }
     }
   };
 
   return (
     <Form>
       {
-        formError ? <Alert variant="danger">{formError}</Alert> : null
+        formError ? <Alert variant="danger">{
+          Array.isArray(formError) ? <ul>{
+            map(formError, e => <li>{e}</li>)
+          }</ul> : formError
+        } </Alert> : null
       }
       <Form.Group controlId="formRestaurant">
         <Form.Label>Restaurant</Form.Label>
@@ -122,7 +142,6 @@ const LunchForm = () => {
           value={restaurant.value ? restaurant.value : undefined}
           onChange={handleRestaurantChange}
           onBlur={() => hasTriedSubmission ? validateForm() : null}
-          isValid={restaurant.isValid}
           isInvalid={restaurant.isValid === false}
         />
       </Form.Group>
@@ -134,7 +153,6 @@ const LunchForm = () => {
           value={cost.value ? cost.value.toString() : undefined}
           onChange={handleCostChange}
           onBlur={() => hasTriedSubmission ? validateForm() : null}
-          isValid={cost.isValid}
           isInvalid={cost.isValid === false}
         />
       </Form.Group>

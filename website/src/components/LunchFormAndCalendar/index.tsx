@@ -55,8 +55,7 @@ const LunchFormAndCalendar = () => {
   const lunchContext: ILunchContext = {
     lunches,
     currentLunchId,
-    addLunch: (lunchId: number, lunch: ILunch) => setLunches({ ...lunches, [lunchId]: lunch }),
-    updateLunch: (lunchId: number, lunch: ILunch) => setLunches({ ...lunches, [lunchId]: lunch }),
+    AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => setLunches({ ...lunches, [lunchId]: lunch }),
     setCurrentLunchId: (lunchId: number) => setCurrentLunchId(lunchId),
   };
 
