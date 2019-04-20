@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 
-namespace Octogami.LunchTracker.Api.Features.User.GetJwt
+namespace Octogami.LunchTracker.Api.Features.Auth.SignIn
 {
     public interface IJwtDecoder
     {
