@@ -90,7 +90,6 @@ const LunchForm = () => {
       return;
     }
     const client = new UserClient(appConfig.BaseUrl);
-    client.authorizationToken = user.authToken;
     let response: CreateOrUpdateLunchResponse;
     try {
       response = await client.createOrUpdateLunch(user.appUserId, lunchDate.value, {

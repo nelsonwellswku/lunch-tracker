@@ -3,23 +3,11 @@ import React from "react";
 export interface IAppContext {
   login: (token: string) => void,
   logout: () => void,
-  user: (IUser & IJwtPayload) | null,
-}
-
-export interface IJwtPayload {
-  iss: string;
-  sub: string;
-  aud: string;
-  exp: number;
-  nbf: number;
-  iat: number;
-  appUserId: number;
-  firstName: string;
-  lastName: string;
+  user: IUser | null,
 }
 
 export interface IUser {
-  authToken: string,
+  appUserId: number,
 }
 
 const AppContext = React.createContext<IAppContext>({

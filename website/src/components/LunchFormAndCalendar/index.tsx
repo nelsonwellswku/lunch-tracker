@@ -21,7 +21,6 @@ const LunchFormAndCalendar = () => {
 
   useEffect(() => {
     const userClient = new UserClient(appConfig.BaseUrl);
-    userClient.authorizationToken = appContext.user && appContext.user.authToken || '';
     const user = appContext.user;
     if (!user) {
       return;
