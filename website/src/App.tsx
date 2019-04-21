@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import MainNav from './components/MainNav';
 import AppContext, { IUser } from './contexts/AppContext';
@@ -6,17 +6,15 @@ import SignIn from './components/SignIn';
 import SignOut from './components/SignOut';
 import PageNotFound from './components/PageNotFound';
 import Home from './components/Home';
-import { AuthClient } from './api/generated';
-import appConfig from './appConfig';
+import ApiContext from './contexts/ApiContext';
 
 const App = () => {
   const existingUserId = window.localStorage.getItem("appUserId");
   const [user, setUser] = useState<IUser | null>(existingUserId ? { appUserId: parseInt(existingUserId, 10) } : null);
+  const { authClient } = useContext(ApiContext);
 
   const login = async (token: string) => {
-
-    const client = new AuthClient(appConfig.BaseUrl);
-    const response = await client.signIn({
+    const response = await authClient.signIn({
       externalToken: token,
     });
 
@@ -27,8 +25,7 @@ const App = () => {
   };
 
   const logout = () => {
-    const client = new AuthClient(appConfig.BaseUrl);
-    client.signOut();
+    authClient.signOut();
     window.localStorage.removeItem("appUserId");
     setUser(null);
   }

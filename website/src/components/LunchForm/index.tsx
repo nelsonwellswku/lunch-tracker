@@ -7,12 +7,13 @@ import { FormControlProps } from 'react-bootstrap/FormControl';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import AppContext from '../../contexts/AppContext';
-import { UserClient, CreateOrUpdateLunchResponse, SwaggerException } from '../../api/generated';
+import { CreateOrUpdateLunchResponse, SwaggerException } from '../../api/generated';
 import appConfig from '../../appConfig';
 import startOfDay from 'date-fns/startOfDay';
 import LunchContext, { RevisitEnum } from '../../contexts/LunchContext';
 import map from 'lodash/map';
 import flatMap from 'lodash/flatMap';
+import ApiContext from '../../contexts/ApiContext';
 
 type FormInputEvent = React.FormEvent<ReplaceProps<"input", BsPrefixProps<"input"> & FormControlProps>>;
 
@@ -22,7 +23,8 @@ interface IFormField<T> {
 }
 
 const LunchForm = () => {
-  const appContext = useContext(AppContext);
+  const { user } = useContext(AppContext);
+  const { userClient } = useContext(ApiContext);
   const lunchContext = useContext(LunchContext);
   const [restaurant, setRestaurant] = useState<IFormField<string | null>>({ value: null, isValid: undefined, });
   const [cost, setCost] = useState<IFormField<number | null>>({ value: null, isValid: undefined, });
@@ -85,14 +87,13 @@ const LunchForm = () => {
       return;
     }
 
-    const { user } = appContext;
     if (!user) {
       return;
     }
-    const client = new UserClient(appConfig.BaseUrl);
+
     let response: CreateOrUpdateLunchResponse;
     try {
-      response = await client.createOrUpdateLunch(user.appUserId, lunchDate.value, {
+      response = await userClient.createOrUpdateLunch(user.appUserId, lunchDate.value, {
         cost: cost.value ? cost.value : undefined,
         restaurant: restaurant.value ? restaurant.value : undefined,
         revisit: revisit.value,
