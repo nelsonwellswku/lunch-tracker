@@ -54,7 +54,6 @@ const App = () => {
         </Route>
       </Switch>
 
-
     </AppContext.Provider>
   );
 }

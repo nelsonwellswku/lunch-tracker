@@ -10,6 +10,7 @@ import { UserClient } from '../../api/generated';
 import appConfig from '../../appConfig';
 import AppContext from '../../contexts/AppContext';
 import { Dictionary } from 'lodash';
+import ApiContext from '../../contexts/ApiContext';
 
 
 const LunchFormAndCalendar = () => {
@@ -17,11 +18,10 @@ const LunchFormAndCalendar = () => {
   const [lunches, setLunches] = useState<{ [key: number]: ILunch }>({});
   const [currentLunchId, setCurrentLunchId] = useState<number | null>(null);
 
-  const appContext = useContext(AppContext);
+  const { user } = useContext(AppContext);
+  const { userClient } = useContext(ApiContext);
 
   useEffect(() => {
-    const userClient = new UserClient(appConfig.BaseUrl);
-    const user = appContext.user;
     if (!user) {
       return;
     }

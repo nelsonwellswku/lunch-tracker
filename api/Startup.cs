@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -58,7 +59,11 @@ namespace api
             services.Decorate<IJwtDecoder, CachingJwtDecoder>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie();
+                    .AddCookie(options =>
+                    {
+                        options.Events.OnRedirectToLogin = ctx => Task.FromResult(ctx.Response.StatusCode = 401);
+                        options.Events.OnRedirectToAccessDenied = ctx => Task.FromResult(ctx.Response.StatusCode = 403);
+                    });
 
             services.AddScoped<ICurrentUserReader, CurrentUserReader>();
 

@@ -8,7 +8,6 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import AppContext from '../../contexts/AppContext';
 import { CreateOrUpdateLunchResponse, SwaggerException } from '../../api/generated';
-import appConfig from '../../appConfig';
 import startOfDay from 'date-fns/startOfDay';
 import LunchContext, { RevisitEnum } from '../../contexts/LunchContext';
 import map from 'lodash/map';
