@@ -92,7 +92,7 @@ namespace Octogami.LunchTracker.Api.Features.Auth.SignIn
             var authProperties = new AuthenticationProperties
             {
                 AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.Now.AddMinutes(1),
+                ExpiresUtc = DateTimeOffset.Now.AddMinutes(60),
                 IsPersistent = true,
             };
 
