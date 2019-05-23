@@ -1,36 +1,42 @@
 {
-  "name": "lunch-tracker-website",
+  "name": "website",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://localhost:5001",
   "dependencies": {
-    "axios": "^0.18.0",
-    "bootstrap": "3.3.7",
-    "jwt-decode": "^2.2.0",
-    "moment": "^2.22.2",
-    "react": "^16.5.1",
-    "react-big-calendar": "^0.20.2",
-    "react-bootstrap": "^0.32.4",
-    "react-bootstrap-typeahead": "^3.2.4",
-    "react-dom": "^16.5.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.5"
+    "@types/jest": "24.0.11",
+    "@types/lodash": "^4.14.123",
+    "@types/node": "11.11.3",
+    "@types/react": "16.8.8",
+    "@types/react-big-calendar": "^0.20.13",
+    "@types/react-dom": "16.8.2",
+    "@types/react-router-dom": "^4.3.1",
+    "bootstrap": "^4.3.1",
+    "date-fns": "^2.0.0-alpha.27",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "react": "^16.8.4",
+    "react-big-calendar": "^0.20.4",
+    "react-bootstrap": "^1.0.0-beta.5",
+    "react-dom": "^16.8.4",
+    "react-google-login": "^5.0.2",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "typescript": "3.3.3333"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8000",
-  "devDependencies": {
-    "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
-    "enzyme-to-json": "^3.3.4",
-    "jest-localstorage-mock": "^2.2.0"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
