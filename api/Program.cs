@@ -23,6 +23,7 @@ namespace api
                 {
                     config.AddJsonFile("appsettings.json");
                     config.AddUserSecrets<Startup>();
+                    config.AddEnvironmentVariables();
                 })
                 .UseStartup<Startup>();
     }

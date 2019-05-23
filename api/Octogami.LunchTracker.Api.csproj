@@ -22,6 +22,10 @@
     <PackageReference Include="scrutor" Version="3.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="migration.sql" CopyToPublishDirectory="Always" />
+  </ItemGroup>
+
   <Target Name="NSwag" AfterTargets="Build">
     <Exec Command="$(NSwagExe_Core22) run ../nswag.json" />
   </Target>

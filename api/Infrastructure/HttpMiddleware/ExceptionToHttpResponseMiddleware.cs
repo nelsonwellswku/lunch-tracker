@@ -32,7 +32,14 @@ namespace Octogami.LunchTracker.Api.Infrastructure.HttpMiddleware
                         await context.Response.WriteAsync(JsonConvert.SerializeObject(ve.Errors));
                         break;
                     default:
-                        throw;
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = 500;
+                        var response = new
+                        {
+                            message = e.Message,
+                        };
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+                        break;
                 }
             }
         }
