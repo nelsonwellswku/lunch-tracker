@@ -47,7 +47,8 @@ namespace api
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddEntityFrameworkSqlServer()
                     .AddDbContext<LunchTrackerContext>(options =>
-                        options.UseSqlServer(Configuration.GetConnectionString("LunchTrackerDatabase"))
+                        options.UseSqlServer(Configuration.GetConnectionString("LunchTrackerDatabase"),
+                        x => x.MigrationsHistoryTable("__MigrationHistory", "lt"))
                     );
 
             services.Scan(scan => scan.FromAssemblyOf<Startup>()

@@ -1,0 +1,57 @@
+trigger:
+  - azure-pipelines
+
+pool:
+  vmImage: ubuntu-16.04
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore Nuget Packages'
+    inputs:
+      command: 'restore'
+      projects: './api/Octogami.LunchTracker.Api.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build API Project'
+    inputs:
+      command: 'build'
+      projects: './api/Octogami.LunchTracker.Api.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Generate Database Migration Script'
+    inputs:
+      command: 'custom'
+      custom: 'ef'
+      arguments: 'migrations script -o ./migration.sql -p ./Octogami.LunchTracker.Api.csproj --idempotent'
+      workingDirectory: './api'
+
+  - script: yarn install --pure-lockfile
+    displayName: 'Restore NPM Packages'
+    workingDirectory: './website'
+
+  - script: yarn build
+    displayName: 'Build Front-End'
+    workingDirectory: './website'
+
+  - task: CopyFiles@2
+    displayName: 'Copy Front-End Artifacts to wwwroot Directory'
+    inputs:
+      SourceFolder: './website/build'
+      TargetFolder: './api/wwwroot'
+      Contents: '**'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Create Build Zip File'
+    inputs:
+      command: 'publish'
+      projects: './api/Octogami.LunchTracker.Api.csproj'
+      zipAfterPublish: true
+
+  # Debug build because I couldn't figure out how to get
+  # previous task to build release configuration
+  # "configuration" input didn't work
+  - task: PublishPipelineArtifact@0
+    displayName: 'Publish Zip File to Artifact Store'
+    inputs:
+      artifactName: 'LunchTrackerArtifact'
+      targetPath: './api/bin/Debug/netcoreapp2.2/publish.zip'
