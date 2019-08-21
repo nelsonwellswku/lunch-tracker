@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Calendar from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import map from 'lodash/map';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -8,6 +8,7 @@ import LunchContext from '../../contexts/LunchContext';
 const LunchCalendar = () => {
 
   const lunchContext = useContext(LunchContext);
+  const localizer = momentLocalizer(moment);
 
   const events = map(lunchContext.lunches, (lunch) => {
     return {
@@ -22,7 +23,7 @@ const LunchCalendar = () => {
   return (
     <div style={{ height: "80vh" }}>
       <Calendar
-        localizer={Calendar.momentLocalizer(moment)}
+        localizer={localizer}
         defaultDate={new Date()}
         defaultView="month"
         events={events}

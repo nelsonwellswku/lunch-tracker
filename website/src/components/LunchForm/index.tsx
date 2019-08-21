@@ -28,7 +28,7 @@ const LunchForm = () => {
   const [restaurant, setRestaurant] = useState<IFormField<string | null>>({ value: null, isValid: undefined, });
   const [cost, setCost] = useState<IFormField<number | null>>({ value: null, isValid: undefined, });
   const [revisit, setRevisit] = useState<IFormField<RevisitEnum>>({ value: 'unsure', isValid: undefined });
-  const [lunchDate, setLunchDate] = useState<IFormField<Date>>({ value: startOfDay(new Date()), isValid: undefined });
+  const [lunchDate] = useState<IFormField<Date>>({ value: startOfDay(new Date()), isValid: undefined });
   const [formError, setFormError] = useState<string | string[] | null>(null);
   const [hasTriedSubmission, setHasTriedSubmission] = useState<boolean>(false);
 

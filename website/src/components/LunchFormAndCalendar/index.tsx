@@ -6,8 +6,6 @@ import LunchForm from '../LunchForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import LunchCalendar from '../LunchCalendar';
-import { UserClient } from '../../api/generated';
-import appConfig from '../../appConfig';
 import AppContext from '../../contexts/AppContext';
 import { Dictionary } from 'lodash';
 import ApiContext from '../../contexts/ApiContext';
@@ -49,7 +47,7 @@ const LunchFormAndCalendar = () => {
 
         setLunches(lunchDictionary);
       });
-  }, []);
+  }, [user, userClient]);
 
   const lunchContext: ILunchContext = {
     lunches,
