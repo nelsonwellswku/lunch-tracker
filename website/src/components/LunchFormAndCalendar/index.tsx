@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import reduce from 'lodash/reduce';
-import map from 'lodash/map';
-import LunchContext, { ILunchContext, ILunch, RevisitEnum } from '../../contexts/LunchContext';
+import LunchContext, { ILunchContext, ILunch } from '../../contexts/LunchContext';
 import LunchForm from '../LunchForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import LunchCalendar from '../LunchCalendar';
 import AppContext from '../../contexts/AppContext';
-import { Dictionary } from 'lodash';
 import ApiContext from '../../contexts/ApiContext';
+import startOfMonth from 'date-fns/esm/startOfMonth';
+import endOfMonth from 'date-fns/esm/endOfMonth';
+import { normalize, schema } from 'normalizr';
 
+const lunchSchema = new schema.Entity('lunches', {}, { idAttribute: 'lunchId' });
+const lunchListSchema = [lunchSchema];
 
 const LunchFormAndCalendar = () => {
 
@@ -30,22 +32,8 @@ const LunchFormAndCalendar = () => {
           return;
         }
 
-        const lunches: ILunch[] = map(response.lunches, lunch => ({
-          lunchId: lunch.lunchId || 0,
-          restaurant: lunch.restaurant || null,
-          cost: lunch.cost || null,
-          revisit: (lunch.revisit as RevisitEnum) || 'unsure',
-          date: lunch.date || null,
-        }));
-
-        const lunchDictionary = reduce(lunches, (prev: Dictionary<ILunch>, curr: ILunch) => {
-          return {
-            ...prev,
-            [curr.lunchId]: curr,
-          }
-        }, {});
-
-        setLunches(lunchDictionary);
+        var normalizedLunches = normalize(response.lunches, lunchListSchema);
+        setLunches(normalizedLunches.entities['lunches']);
       });
   }, [user, userClient]);
 
@@ -54,6 +42,25 @@ const LunchFormAndCalendar = () => {
     currentLunchId,
     AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => setLunches({ ...lunches, [lunchId]: lunch }),
     setCurrentLunchId: (lunchId: number) => setCurrentLunchId(lunchId),
+    fetchLunches: async (date: Date) => {
+      if (!user) { return; }
+
+      const response = await userClient.getLunches(
+        user.appUserId,
+        startOfMonth(date),
+        endOfMonth(date),
+      );
+
+      if (response) {
+        const normalized = normalize(response.lunches, lunchListSchema);
+        const normalizedLunches = normalized.entities['lunches'];
+
+        setLunches({
+          ...lunches,
+          ...normalizedLunches,
+        });
+      }
+    },
   };
 
   return (

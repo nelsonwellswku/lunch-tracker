@@ -29,6 +29,7 @@ const LunchCalendar = () => {
         events={events}
         selectable
         views={['month']}
+        onNavigate={d => lunchContext.fetchLunches(d)}
       />
     </div>
   );
