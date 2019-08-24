@@ -52,12 +52,10 @@ const LunchFormAndCalendar = () => {
       );
 
       if (response) {
-        const normalized = normalize(response.lunches, lunchListSchema);
-        const normalizedLunches = normalized.entities['lunches'];
-
+        const normalizedLunches = normalize(response.lunches, lunchListSchema);
         setLunches({
           ...lunches,
-          ...normalizedLunches,
+          ...normalizedLunches.entities['lunches'],
         });
       }
     },
