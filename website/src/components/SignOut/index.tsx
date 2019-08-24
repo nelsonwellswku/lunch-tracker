@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import AppContext, { IAppContext } from '../../contexts/AppContext';
+import AppContext from '../../contexts/AppContext';
 import { Redirect } from 'react-router';
 
 const SignOut = () => {

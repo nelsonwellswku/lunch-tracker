@@ -17,6 +17,7 @@ export interface ILunchContext {
   currentLunchId: number | null,
   AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => void;
   setCurrentLunchId: (lunchId: number) => void;
+  fetchLunches: (date: Date) => void;
 }
 
 const LunchContext = React.createContext<ILunchContext>({
@@ -24,6 +25,7 @@ const LunchContext = React.createContext<ILunchContext>({
   currentLunchId: null,
   AddOrUpdateLunch: (lunchId: number, lunch: ILunch) => { },
   setCurrentLunchId: (lunchId: number) => { },
+  fetchLunches: (month: Date) => { },
 });
 
 export default LunchContext;
