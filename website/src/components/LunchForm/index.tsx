@@ -21,6 +21,11 @@ interface IFormField<T> {
   isValid: boolean | undefined,
 }
 
+interface IResultType {
+  Field: string,
+  Messages: string[],
+}
+
 const LunchForm = () => {
   const { user } = useContext(AppContext);
   const { userClient } = useContext(ApiContext);
@@ -111,12 +116,6 @@ const LunchForm = () => {
       }
     } catch (error) {
       if (error instanceof SwaggerException && error.status >= 400 && error.status < 500) {
-
-        interface IResultType {
-          Field: string,
-          Messages: string[],
-        }
-
         const failures: IResultType[] = JSON.parse(error.response);
         const messages = flatMap(failures, x => x.Messages);
         setFormError(messages);
